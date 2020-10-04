@@ -6,24 +6,30 @@ using UnityEngine;
 // - Dummy container for data regarding each enemy.
 // - The enemies will do the calculations themselves.
 
-public class EnemyManager : MonoBehaviour
+public class EnemyManager
 {
     private List<Enemy> enemies;        // List of all the current enemies on screen.
     private int roundCounter;           // Determines which enemies to spawn.
 
     public List<Vector3> enemyPath;     // The path of points that the enemies LERP between.
 
-    void Start()
+    public EnemyManager()
     {
-        // Set default values.
+        Reset();
+    }
+
+    // Update is called from GameManager every frame.
+    public void Update(float dt)
+    {
+        foreach (Enemy enemy in enemies) { enemy.Update(dt); }
+    }
+
+    public void Reset()
+    {
+        // Set/reset default values.
         enemies.Clear();
         roundCounter = 0;
-
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        foreach(Enemy enemy in enemies) { enemy.Update(Time.deltaTime); }
-    }
+
 }
