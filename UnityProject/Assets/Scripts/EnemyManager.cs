@@ -8,8 +8,8 @@ using UnityEngine;
 
 public class EnemyManager
 {
-    private List<Enemy> enemies;        // List of all the current enemies on screen.
-    private int roundCounter;           // Determines which enemies to spawn.
+    private List<Enemy> enemies = new List<Enemy>();        // List of all the current enemies on screen.
+    private int roundCounter = 0;                           // Determines which enemies to spawn.
 
     public List<Vector3> enemyPath;     // The path of points that the enemies LERP between.
 

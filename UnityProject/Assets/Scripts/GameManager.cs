@@ -18,7 +18,6 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         float dt = Time.deltaTime;
-
-        enemyManager.Update(dt);
+        //enemyManager.Update(dt);
     }
 }
