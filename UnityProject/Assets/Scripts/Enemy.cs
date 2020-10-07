@@ -29,9 +29,6 @@ public class Enemy
         Move();                 // Move the enemy.
     }
 
-
-
-
     // Move the enemy along the path in the enemy manager.
     private void Move()
     {

@@ -10,17 +10,12 @@ public class LevelManager : MonoBehaviour
     public Sprite currentLevelSprite;
     public GameObject levelGameObject;
 
-    public void LoadLevel()
-    {
-        levelGameObject.GetComponent<SpriteRenderer>().sprite = currentLevelSprite;
-    }
+    private Level level0;
 
     void Start()
     {
-        int currentLevel = 0;
-        levelList = new List<Sprite>();
-        levelList.Add(Resources.Load<Sprite>("Levels/level0.png"));
-        LoadLevel();
+        level0 = new Level("", this);
+        level0.LoadLevel();
     }
 
     // Update is called once per frame
