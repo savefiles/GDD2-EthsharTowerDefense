@@ -4,20 +4,38 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    // Simple simpleton instance.
+    public static GameManager instance;
+
+    // Managers
     public EnemyManager enemyManager;
     public TowerManager towerManager;
+    public LevelManager levelManager;
+
+    public float timer;
 
     // Start is called before the first frame update
     void Start()
     {
+        // Make sure there's only one instance of this class.
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
+
+        // Instantiate the managers.
         enemyManager = new EnemyManager();
         towerManager = new TowerManager();
+        levelManager = new LevelManager();
+
+        timer = 0.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
         float dt = Time.deltaTime;
-        //enemyManager.Update(dt);
+        timer += dt;
+        enemyManager.Update(dt);
     }
 }
