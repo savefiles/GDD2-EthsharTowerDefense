@@ -24,6 +24,17 @@ public class Level
         relativePath.Add(new Vector2(0.0f, 0.195f));
         relativePath.Add(new Vector2(0.225f, 0.195f));
         relativePath.Add(new Vector2(0.225f, 0.395f));
+        relativePath.Add(new Vector2(0.345f, 0.395f));
+        relativePath.Add(new Vector2(0.345f, 0.110f));
+        relativePath.Add(new Vector2(0.861f, 0.110f));
+        relativePath.Add(new Vector2(0.861f, 0.244f));
+        relativePath.Add(new Vector2(0.534f, 0.244f));
+        relativePath.Add(new Vector2(0.534f, 0.594f));
+        relativePath.Add(new Vector2(0.186f, 0.594f));
+        relativePath.Add(new Vector2(0.186f, 0.800f));
+        relativePath.Add(new Vector2(0.725f, 0.800f));
+        relativePath.Add(new Vector2(0.725f, 0.402f));
+        relativePath.Add(new Vector2(1.000f, 0.402f));
 
         levelBackground = Resources.Load<Sprite>("Levels/Level0/level0");
     }

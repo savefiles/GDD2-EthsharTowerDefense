@@ -11,11 +11,13 @@ public class Enemy
     private readonly EnemyManager enemyManager;
     private EnemyType type;             // The type of enemy (normal, fast, etc).
     private float timer;                // The amount of time this enemy has been alive.
+    private float timeSinceLastPoint;   // The amount of time that has passed since the enemy left the last point.
 
     private int health;                 // Heath of the unit
     private Vector3 position;           // Current position on the screen.
     private int targetPositionIndex;    // The index in the position list of the target position.
     private float speed;                // The inverse of the amount of time it takes for the enemy to go from each position.
+    private float distanceToNextPosition;
 
     private GameObject gameObject;      // The game object that the enemy is represented by in the scene.
 
@@ -27,12 +29,32 @@ public class Enemy
         this.type = type;
 
         // Instantiate the variables.
-        timer = 0.0f;
         health = 10;
         targetPositionIndex = 1;
         position = enemyManager.enemyPath[0];
-        speed = 1.0f;
         markedForDeletion = false;
+        distanceToNextPosition = Vector3.Distance(enemyManager.enemyPath[targetPositionIndex - 1], enemyManager.enemyPath[targetPositionIndex]);
+
+        // Change default speed/health depending on enemy type.
+        switch (type)
+        {
+            case EnemyType.Normal:
+                health = 10;
+                speed = 2.0f;
+                break;
+            case EnemyType.Fast:
+                health = 6;
+                speed = 5.0f;
+                break;
+            case EnemyType.Tank:
+                health = 30;
+                speed = 1.0f;
+                break;
+            case EnemyType.Boss:
+                health = 100;
+                speed = 0.6f;
+                break;
+        }
 
         // Create a new object for this enemy based on type.
         gameObject = GameObject.Instantiate(enemyManager.enemyPrefabs[(int)type], position, Quaternion.identity);
@@ -43,14 +65,14 @@ public class Enemy
     public void Update(float dt)
     {
         timer += dt;            // Update the current timer.
+        timeSinceLastPoint += dt;
         Move();                 // Move the enemy.
     }
 
     // Move the enemy along the path in the enemy manager.
     private void Move()
     {
-        float timeSpendOnThisPoint = timer - ((1/speed) * (targetPositionIndex - 1));       
-        float percent = timeSpendOnThisPoint * speed;                                       // Calculate the percentage between the last and current target postion
+        float percent = timeSinceLastPoint / (distanceToNextPosition / speed);            // Calculate the percentage between the last and current target postion
 
         position = Vector3.Lerp(enemyManager.enemyPath[targetPositionIndex - 1],            // LERP between the last and current target position.
                                 enemyManager.enemyPath[targetPositionIndex],
@@ -61,19 +83,26 @@ public class Enemy
         if(Vector3.SqrMagnitude(position - enemyManager.enemyPath[targetPositionIndex]) < 1e-3)
         {
             targetPositionIndex += 1;
-        }
-
-        // If the enemy has reached the end of the path, destroy the game object.
-        if(targetPositionIndex == enemyManager.enemyPath.Count)
-        {
-            GameObject.Destroy(gameObject);
-            markedForDeletion = true;
-            //enemyManager.enemies.Remove(this);
+            timeSinceLastPoint = 0.0f;
+            // If the enemy reached the end of the path
+            if (targetPositionIndex == enemyManager.enemyPath.Count)
+            {
+                GameObject.Destroy(gameObject);
+                markedForDeletion = true;
+                //enemyManager.enemies.Remove(this);
+            }
+            else
+            {
+                distanceToNextPosition = Vector3.Distance(enemyManager.enemyPath[targetPositionIndex - 1], enemyManager.enemyPath[targetPositionIndex]);
+            }
         }
     }
 }
 
 public enum EnemyType
 {
-    Normal = 0
+    Normal = 0,
+    Fast = 1,
+    Tank = 2,
+    Boss = 3
 }

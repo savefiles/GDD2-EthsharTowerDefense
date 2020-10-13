@@ -16,19 +16,29 @@ public class EnemyManager
     private float timeSinceLastSpawn = 0.0f;                // The amount of seconds since the last enemy spawn.
     private float timeSinceWaveStart = 0.0f;                // The amount of seconds since the wave started.
 
+    private int enemiesLeftToSpawn;                         // The number of enemies left to spawn in this wave.
+    private List<EnemyType> enemyTypeToSpawn;               // The enemy type to spawn in the coming waves.
+    private float spawnRate;                                // The calculated amount of time it takes to spawn each enemy.
+
     private const float TOTALWAVETIME = 6.0f;               // The amount of time from the start of spawning until next wave.
     private const float SPAWNINGTIMEPERWAVE = 2.0f;         // The amount of time it takes to spawn all enemies in a wave.
-    private int enemiesLeftToSpawn;                         // The number of enemies left to spawn in this wave.
-    private EnemyType enemyTypeToSpawn;                     // The enemy type to spawn in this wave.
-    private float spawnRate;                                // The calculated amount of time it takes to spawn each enemy.
+    private const int   ROUNDSPERBOSS = 5;                  // How many rounds are there until a boss spawn (fixed).
+
+
 
     public EnemyManager()
     {
+        enemyTypeToSpawn = new List<EnemyType>();
+
+        // Reset the enemy manager.
         Reset();
 
         // Add the enemy prefabs to the list.
         enemyPrefabs = new List<GameObject>();
-        enemyPrefabs.Add(Resources.Load<GameObject>("Prefabs/TestEnemy"));
+        enemyPrefabs.Add(Resources.Load<GameObject>("Prefabs/Enemy_Normal"));
+        enemyPrefabs.Add(Resources.Load<GameObject>("Prefabs/Enemy_Fast"));
+        enemyPrefabs.Add(Resources.Load<GameObject>("Prefabs/Enemy_Tank"));
+        enemyPrefabs.Add(Resources.Load<GameObject>("Prefabs/Enemy_Boss"));
     }
 
     // Update is called from GameManager every frame.
@@ -44,7 +54,7 @@ public class EnemyManager
             if (timeSinceLastSpawn > spawnRate)
             {
                 timeSinceLastSpawn = 0.0f;
-                enemies.Add(new Enemy(EnemyType.Normal, this));
+                enemies.Add(new Enemy(enemyTypeToSpawn[0], this));
                 enemiesLeftToSpawn -= 1;
             }
         }
@@ -65,11 +75,18 @@ public class EnemyManager
         {
             // Generate the wave.
             roundCounter += 1;
-            GenerateWave(roundCounter, EnemyType.Normal);
+            GenerateWave(roundCounter, enemyTypeToSpawn[0]);
+            enemyTypeToSpawn.RemoveAt(0);
 
             // Reset the timers and such.
             timeSinceLastSpawn = 0.0f;
             timeSinceWaveStart = 0.0f;
+
+            // Get the enemy type of the next wave.
+            if(roundCounter + enemyTypeToSpawn.Count % ROUNDSPERBOSS == 0)
+                enemyTypeToSpawn.Add(EnemyType.Boss);
+            else
+                enemyTypeToSpawn.Add((EnemyType) Random.Range(0, 3));
         }
 
     }
@@ -79,6 +96,12 @@ public class EnemyManager
         // Set/reset default values.
         enemies.Clear();
         roundCounter = 0;
+
+        // Generate the first few waves.
+        for(int i = 0; i < 5; i++)
+        {
+            enemyTypeToSpawn.Add((EnemyType)Random.Range(0, 3));
+        }
     }
 
     // Method that generates a wave depending on wave number and enemy type.
@@ -92,7 +115,6 @@ public class EnemyManager
         enemiesLeftToSpawn = Mathf.CeilToInt(10 * difficultyScalar);
 
         spawnRate = SPAWNINGTIMEPERWAVE / (float) enemiesLeftToSpawn;
-        enemyTypeToSpawn = enemyType;
     }
 
 
