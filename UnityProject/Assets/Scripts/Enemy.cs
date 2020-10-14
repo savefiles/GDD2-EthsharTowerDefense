@@ -11,18 +11,20 @@ public class Enemy
     private readonly EnemyManager enemyManager;
     private EnemyType type;             // The type of enemy (normal, fast, etc).
     private float timer;                // The amount of time this enemy has been alive.
-    private float timeSinceLastPoint;   // The amount of time that has passed since the enemy left the last point.
+    public float timeSinceLastPoint { get; private set; }   // The amount of time that has passed since the enemy left the last point.
 
-    private int health;                 // Heath of the unit
-    private Vector3 position;           // Current position on the screen.
-    private int targetPositionIndex;    // The index in the position list of the target position.
-    private float speed;                // The inverse of the amount of time it takes for the enemy to go from each position.
-    private float distanceToNextPosition;
+    private int health;                                     // Heath of the unit
+    private Vector3 position;                               // Current position on the screen.
+    public int targetPositionIndex { get; private set; }    // The index in the position list of the target position.
+    private float speed;                                    // The inverse of the amount of time it takes for the enemy to go from each position.
+    private float distanceToNextPosition;                   // The distance between the last target and the current target.
 
     private GameObject gameObject;      // The game object that the enemy is represented by in the scene.
 
     public bool markedForDeletion;      // Flag that tells the EnemyManager that this enemy has reached the end or died.
-    
+
+    // Getters/Setters
+
     public Enemy(EnemyType type, EnemyManager enemyManager)
     {
         this.enemyManager = enemyManager;
