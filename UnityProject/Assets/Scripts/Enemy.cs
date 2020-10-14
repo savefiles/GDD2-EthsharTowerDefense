@@ -13,7 +13,7 @@ public class Enemy
     private float timer;                // The amount of time this enemy has been alive.
     public float timeSinceLastPoint { get; private set; }   // The amount of time that has passed since the enemy left the last point.
 
-    private int health;                                     // Heath of the unit
+    private float health;                                   // Heath of the unit
     private Vector3 position;                               // Current position on the screen.
     public int targetPositionIndex { get; private set; }    // The index in the position list of the target position.
     private float speed;                                    // The inverse of the amount of time it takes for the enemy to go from each position.
@@ -41,19 +41,19 @@ public class Enemy
         switch (type)
         {
             case EnemyType.Normal:
-                health = 10;
+                health = 10.0f;
                 speed = 2.0f;
                 break;
             case EnemyType.Fast:
-                health = 6;
+                health = 6.0f;
                 speed = 5.0f;
                 break;
             case EnemyType.Tank:
-                health = 30;
+                health = 30.0f;
                 speed = 1.0f;
                 break;
             case EnemyType.Boss:
-                health = 100;
+                health = 100.0f;
                 speed = 0.6f;
                 break;
         }
@@ -98,6 +98,19 @@ public class Enemy
                 distanceToNextPosition = Vector3.Distance(enemyManager.enemyPath[targetPositionIndex - 1], enemyManager.enemyPath[targetPositionIndex]);
             }
         }
+    }
+
+    // Function that deals damage to the current enemy. Returns if the damage dealt a killing blow.
+    public bool TakeDamage(float damage)
+    {
+        health -= damage;
+        // Check if the enemy is dead.
+        if(health < 0.0f)
+        {
+            markedForDeletion = true;
+            return true;
+        }
+        return false;
     }
 }
 
