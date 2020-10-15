@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public TowerManager towerManager;
     public LevelManager levelManager;
 
+    public int round = 0;
+
     public float timer;
 
     // Start is called before the first frame update
@@ -37,5 +39,6 @@ public class GameManager : MonoBehaviour
         float dt = Time.deltaTime;
         timer += dt;
         enemyManager.Update(dt);
+        round = enemyManager.roundCounter;
     }
 }
