@@ -19,7 +19,7 @@ public class Enemy
     private float speed;                                    // The inverse of the amount of time it takes for the enemy to go from each position.
     private float distanceToNextPosition;                   // The distance between the last target and the current target.
 
-    private GameObject gameObject;      // The game object that the enemy is represented by in the scene.
+    public GameObject gameObject;      // The game object that the enemy is represented by in the scene.
 
     public bool markedForDeletion;      // Flag that tells the EnemyManager that this enemy has reached the end or died.
 
@@ -46,11 +46,11 @@ public class Enemy
                 break;
             case EnemyType.Fast:
                 health = 6.0f;
-                speed = 5.0f;
+                speed = 3.5f;
                 break;
             case EnemyType.Tank:
                 health = 30.0f;
-                speed = 1.0f;
+                speed = 1.2f;
                 break;
             case EnemyType.Boss:
                 health = 100.0f;
@@ -95,6 +95,11 @@ public class Enemy
             }
             else
             {
+                // CHANGE DIRECTION THAT THE ENEMY IS FACING.
+                Vector3 newForwardVector = Vector3.Normalize(enemyManager.enemyPath[targetPositionIndex] - enemyManager.enemyPath[targetPositionIndex - 1]);
+                gameObject.transform.right = (Vector2) newForwardVector;
+
+
                 distanceToNextPosition = Vector3.Distance(enemyManager.enemyPath[targetPositionIndex - 1], enemyManager.enemyPath[targetPositionIndex]);
             }
         }

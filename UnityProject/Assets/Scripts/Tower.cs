@@ -93,7 +93,7 @@ public class Tower : MonoBehaviour {
 
         else {
             if (towerAttack == AttackType.typeHitscan) {
-                towerTarget.health -= towerDamage;
+                towerTarget.TakeDamage(towerDamage);
             }
         }
     }
