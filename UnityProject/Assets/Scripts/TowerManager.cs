@@ -14,6 +14,8 @@ public class TowerManager : MonoBehaviour {
 
     public Transform towerPrefab;
 
+    private Sprite mapMask;
+
     void Start() {
         //  Part - Mana Setup
         manaCurr = 0;
@@ -29,28 +31,60 @@ public class TowerManager : MonoBehaviour {
     }
 
     void Update() {
-       //   Possible Mana Recovery
+        //   Possible Mana Recovery
     }
 
     public void TowerCreation(Vector3 pPos, string pTower) {
-        // Part - Tower Location Check
+        //  Part - Tower Location Check
         bool towerPos = true;
         int tempSize = towerSize[pTower];
-        foreach (Transform tower in towers) {
-            if (Vector3.Distance(tower.transform.position, pPos) < (tower.GetComponent<Tower>().towerSize + tempSize)) {
-                towerPos = false;
-                break;
+
+        //  >> SubPart - Path Location Check
+        towerPos = PathCheck(pPos, tempSize);
+
+        //  >> SubPart - Other Towers Check
+        if (towerPos == true) {
+            foreach (Transform tower in towers) {
+                if (Vector3.Distance(tower.transform.position, pPos) < (tower.GetComponent<Tower>().towerSize + tempSize)) {
+                    towerPos = false;
+                    break;
+                }
             }
         }
 
         //  Part - Tower Mana Check
         bool tempCost = (manaCurr >= towerCost[pTower]);
-        
+
         //  Part - Tower Creation
         if (towerPos == true && tempCost == true) {
             Transform tempTower = Instantiate(towerPrefab, pPos, Quaternion.identity, transform);
             tempTower.GetComponent<Tower>().TowerCreation(pTower);
             towers.Add(tempTower);
         }
+    }
+
+    private bool PathCheck(Vector3 pPos, int pSize) {
+        List<Vector3> levelPath = GameManager.instance.levelManager.currentLevel.worldPath;
+
+        bool tempBool = true;
+        for (int i = 0; i < levelPath.Count - 1; i++) {
+            //  Part - Horizontal Path
+            if (levelPath[i].y == levelPath[i + 1].y) {
+                if (Mathf.Abs(pPos.y - levelPath[i].y) < pSize + 2.5) {
+                    tempBool = false;
+                    break;
+                }
+            }
+
+            //  Part - Vertical Path
+            else if (levelPath[i].x == levelPath[i + 1].x) {
+                if (Mathf.Abs(pPos.x - levelPath[i].x) < pSize + 2.5) {
+                    tempBool = false;
+                    break;
+                }
+            }
+        }
+
+        return tempBool;
     }
 }
