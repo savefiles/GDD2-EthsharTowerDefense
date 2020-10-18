@@ -10,8 +10,8 @@ public class Level
     private readonly LevelManager lm;
     private readonly SpriteRenderer sr;
     private List<Vector2> relativePath;          // Collection of poitns that represent the path from start to end (relative to the image).
-    private List<Vector3> worldPath;             // Collection of points that represent the path from start to end (world coords).
-    private Sprite levelBackground;              // The image that represents the background.
+    public List<Vector3> worldPath { get; private set; }    // Collection of points that represent the path from start to end (world coords).
+    private Sprite levelBackground;                         // The image that represents the background.
 
 
     public Level(string folderPath, LevelManager lm)
