@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public EnemyManager enemyManager;
     public TowerManager towerManager;
     public LevelManager levelManager;
+    public UIManager    uiManager;
 
     public int round = 0;
 
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
         enemyManager = new EnemyManager();
         towerManager = new TowerManager();
         levelManager = new LevelManager();
+        uiManager    = new UIManager();
 
         timer = 0.0f;
     }
@@ -40,5 +42,8 @@ public class GameManager : MonoBehaviour
         timer += dt;
         enemyManager.Update(dt);
         round = enemyManager.roundCounter;
+
+        uiManager.Update();
     }
+
 }
