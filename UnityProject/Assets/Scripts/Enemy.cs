@@ -99,7 +99,6 @@ public class Enemy
                 Vector3 newForwardVector = Vector3.Normalize(enemyManager.enemyPath[targetPositionIndex] - enemyManager.enemyPath[targetPositionIndex - 1]);
                 gameObject.transform.right = (Vector2) newForwardVector;
 
-
                 distanceToNextPosition = Vector3.Distance(enemyManager.enemyPath[targetPositionIndex - 1], enemyManager.enemyPath[targetPositionIndex]);
             }
         }

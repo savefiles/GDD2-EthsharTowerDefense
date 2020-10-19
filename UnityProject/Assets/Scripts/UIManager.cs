@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 public class UIManager
 {
-    // Prefabs
+    // Buttons in the scene.
     GameObject button_spawnArcher;
     GameObject button_spawnBomb;
     GameObject button_spawnMage;
@@ -29,11 +29,15 @@ public class UIManager
     public UIManager()
     {
         // Find the proper prefabs.
-        button_spawnArcher = Resources.Load<GameObject>("Prefabs/Button_SpawnArcher");
-        button_spawnBomb   = Resources.Load<GameObject>("Prefabs/Button_SpawnBomb");
-        button_spawnMage   = Resources.Load<GameObject>("Prefabs/Button_SpawnMage");
+        button_spawnArcher = GameObject.Find("Button_SpawnArcher");
+        button_spawnBomb   = GameObject.Find("Button_SpawnBomb");
+        button_spawnMage   = GameObject.Find("Button_SpawnMage");
 
-        
+        button_spawnArcher.GetComponent<Button>().onClick.AddListener(() => { SpawnTower(0); });
+        button_spawnMage  .GetComponent<Button>().onClick.AddListener(() => { SpawnTower(1); });
+        button_spawnBomb  .GetComponent<Button>().onClick.AddListener(() => { SpawnTower(2); });
+
+
         canvas = GameObject.Find("Canvas");
         camera = GameObject.Find("Main Camera");
         tm = GameManager.instance.towerManager;
@@ -42,8 +46,58 @@ public class UIManager
     // Called from Game Manager
     public void Update()
     {
-        CheckClicks();
+        
     }
+
+
+    private void SpawnTower(int type)
+    {
+        // Call function from tower manager (type 0 = archer, type 1 = mage, type 2 = bomb)
+
+        Debug.Log("Spawn tower of type" + type);
+    }
+
+
+    /* Leftover code from spawning button UI on mouse cursor (here for reference)
+    private void SpawnTower(int type)
+    {
+        // Call function from tower manager (type 0 = archer, type 1 = mage, type 2 = bomb)
+
+        // Set spawning active to false, destroy buttons.
+        isSpawningUIActive = false;
+        foreach(GameObject button in createdTowerButtons)
+            GameObject.Destroy(button);
+        createdTowerButtons.Clear();
+
+        Debug.Log("Spawn tower of type" + type);
+    } 
+    
+    private void SpawnTowerPlacementButtons(Vector3 mousePos)
+    {
+        // Three relative position vectors for the buttons (in pixels)
+        Vector3 archerButtonPos = mousePos + new Vector3(-35f, 10f, -9.0f);
+        Vector3 mageButtonPos = mousePos + new Vector3(0f, 30f, -9.0f);
+        Vector3 bombButtonPos = mousePos + new Vector3(35f, 10f, -9.0f);
+
+        // Instantiate the game objects
+        GameObject achrButton = GameObject.Instantiate(button_spawnArcher, archerButtonPos, Quaternion.identity, canvas.transform);
+        GameObject mageButton = GameObject.Instantiate(button_spawnMage, mageButtonPos, Quaternion.identity, canvas.transform);
+        GameObject bombButton = GameObject.Instantiate(button_spawnBomb, bombButtonPos, Quaternion.identity, canvas.transform);
+
+        // Assign the onclick functions (call a function from tower manager with params)
+        achrButton.GetComponent<Button>().onClick.AddListener(() => { SpawnTower(0); });
+        mageButton.GetComponent<Button>().onClick.AddListener(() => { SpawnTower(1); });
+        bombButton.GetComponent<Button>().onClick.AddListener(() => { SpawnTower(2); });
+
+        // Add the buttons to the list.
+        createdTowerButtons.Add(achrButton);
+        createdTowerButtons.Add(mageButton);
+        createdTowerButtons.Add(bombButton);
+
+        // The buttons are currently displayed.
+        isSpawningUIActive = true;
+    }
+
 
     // Check if the user has clicked on the screen (only check in game scene).
     private void CheckClicks()
@@ -64,48 +118,10 @@ public class UIManager
                 createdTowerButtons.Clear();
             }
 
-
-
-
             // If so, make the UI pop up
             SpawnTowerPlacementButtons(mousePos);
         }
     }
+    */
 
-    private void SpawnTowerPlacementButtons(Vector3 mousePos)
-    {
-        // Three relative position vectors for the buttons (in pixels)
-        Vector3 archerButtonPos = mousePos + new Vector3(-35f, 10f, -9.0f);
-        Vector3 mageButtonPos   = mousePos + new Vector3(  0f, 30f, -9.0f);
-        Vector3 bombButtonPos   = mousePos + new Vector3( 35f, 10f, -9.0f);
-
-        // Instantiate the game objects
-        GameObject achrButton = GameObject.Instantiate(button_spawnArcher, archerButtonPos, Quaternion.identity, canvas.transform);
-        GameObject mageButton = GameObject.Instantiate(button_spawnMage,   mageButtonPos,   Quaternion.identity, canvas.transform);
-        GameObject bombButton = GameObject.Instantiate(button_spawnBomb,   bombButtonPos,   Quaternion.identity, canvas.transform);
-
-        // Assign the onclick functions (call a function from tower manager with params)
-        achrButton.GetComponent<Button>().onClick.AddListener(() => { SpawnTower(0); });
-        mageButton.GetComponent<Button>().onClick.AddListener(() => { SpawnTower(1); });
-        bombButton.GetComponent<Button>().onClick.AddListener(() => { SpawnTower(2); });
-
-        // Add the buttons to the list.
-        createdTowerButtons.Add(achrButton);
-        createdTowerButtons.Add(mageButton);
-        createdTowerButtons.Add(bombButton);
-
-        // The buttons are currently displayed.
-        isSpawningUIActive = true;
-    }
-
-    private void SpawnTower(int type)
-    {
-        // Call function from tower manager (type 0 = archer, type 1 = mage, type 2 = bomb)
-
-        // Set spawning active to false, destroy buttons.
-        isSpawningUIActive = false;
-        foreach(GameObject button in createdTowerButtons)
-            GameObject.Destroy(button);
-        createdTowerButtons.Clear();
-    }
 }
