@@ -15,14 +15,15 @@ public class UIManager
     GameObject button_spawnBomb;
     GameObject button_spawnMage;
 
-    // Canvas object
-    GameObject canvas;
 
-    // List to hold the dynamically created buttons.
-    List<GameObject> createdTowerButtons = new List<GameObject>();
+    GameObject canvas;      // Canvas object
+    GameObject camera;      // Viewing camera
+    TowerManager tm;        // Tower manager
 
-    // Should the user be allowed to spawn the tower ui
-    bool isSpawningUIActive = false;
+
+
+    List<GameObject> createdTowerButtons = new List<GameObject>();          // List to hold the dynamically created buttons.
+    bool isSpawningUIActive = false;                                        // Should the user be allowed to spawn the tower ui
 
 
     public UIManager()
@@ -32,8 +33,10 @@ public class UIManager
         button_spawnBomb   = Resources.Load<GameObject>("Prefabs/Button_SpawnBomb");
         button_spawnMage   = Resources.Load<GameObject>("Prefabs/Button_SpawnMage");
 
-        // Set the canvas object reference.
+        
         canvas = GameObject.Find("Canvas");
+        camera = GameObject.Find("Main Camera");
+        tm = GameManager.instance.towerManager;
     }
 
     // Called from Game Manager
@@ -49,7 +52,9 @@ public class UIManager
         if (Input.GetMouseButtonDown(1))
         {
             // Check the validity of the location they clicked on the screen
-
+            Vector3 mousePos = Input.mousePosition;
+            if(tm.PathCheck(camera.GetComponent<Camera>().ScreenToWorldPoint(mousePos), 0))       // No idea what the size should be
+                return;
 
             // If the tower spawn UI is already up, cull the previous buttons.
             if (isSpawningUIActive == true)
@@ -63,7 +68,6 @@ public class UIManager
 
 
             // If so, make the UI pop up
-            Vector3 mousePos = Input.mousePosition;
             SpawnTowerPlacementButtons(mousePos);
         }
     }

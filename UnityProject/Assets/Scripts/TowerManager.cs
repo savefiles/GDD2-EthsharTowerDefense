@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class TowerManager : MonoBehaviour {
+public class TowerManager{
     //  Mana Variables
     private int manaCurr;
     public int ManaCurr => manaCurr;
@@ -16,7 +16,7 @@ public class TowerManager : MonoBehaviour {
 
     private Sprite mapMask;
 
-    void Start() {
+    public TowerManager() {
         //  Part - Mana Setup
         manaCurr = 0;
 
@@ -57,13 +57,13 @@ public class TowerManager : MonoBehaviour {
 
         //  Part - Tower Creation
         if (towerPos == true && tempCost == true) {
-            Transform tempTower = Instantiate(towerPrefab, pPos, Quaternion.identity, transform);
+            Transform tempTower = GameObject.Instantiate(towerPrefab, pPos, Quaternion.identity);
             tempTower.GetComponent<Tower>().TowerCreation(pTower);
             towers.Add(tempTower);
         }
     }
 
-    private bool PathCheck(Vector3 pPos, int pSize) {
+    public bool PathCheck(Vector3 pPos, int pSize) {
         List<Vector3> levelPath = GameManager.instance.levelManager.currentLevel.worldPath;
 
         bool tempBool = true;
