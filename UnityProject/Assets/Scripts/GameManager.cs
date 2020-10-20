@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public UIManager    uiManager;
 
     public int round = 0;
-
+    public float FPS;
     public float timer;
 
     // Start is called before the first frame update
@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         float dt = Time.deltaTime;
+        FPS = 1/dt;
         timer += dt;
         enemyManager.Update(dt);
         round = enemyManager.roundCounter;

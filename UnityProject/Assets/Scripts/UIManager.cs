@@ -14,12 +14,12 @@ public class UIManager
     GameObject button_spawnArcher;
     GameObject button_spawnBomb;
     GameObject button_spawnMage;
-
+    GameObject button_nextWave;
 
     GameObject canvas;      // Canvas object
     GameObject camera;      // Viewing camera
     TowerManager tm;        // Tower manager
-
+    EnemyManager em;        // Enemy manager;
 
 
     List<GameObject> createdTowerButtons = new List<GameObject>();          // List to hold the dynamically created buttons.
@@ -28,19 +28,27 @@ public class UIManager
 
     public UIManager()
     {
-        // Find the proper prefabs.
+        // Instantiate references to managers.
+        tm = GameManager.instance.towerManager;
+        em = GameManager.instance.enemyManager;
+
+
+        // Find the buttons in the scene.
         button_spawnArcher = GameObject.Find("Button_SpawnArcher");
         button_spawnBomb   = GameObject.Find("Button_SpawnBomb");
         button_spawnMage   = GameObject.Find("Button_SpawnMage");
+        button_nextWave    = GameObject.Find("Button_NextWave");
 
+        // Add on click methods to the buttons
         button_spawnArcher.GetComponent<Button>().onClick.AddListener(() => { SpawnTower(0); });
         button_spawnMage  .GetComponent<Button>().onClick.AddListener(() => { SpawnTower(1); });
         button_spawnBomb  .GetComponent<Button>().onClick.AddListener(() => { SpawnTower(2); });
+        button_nextWave   .GetComponent<Button>().onClick.AddListener(() => { em.SpawnNextWave(); });
 
 
         canvas = GameObject.Find("Canvas");
         camera = GameObject.Find("Main Camera");
-        tm = GameManager.instance.towerManager;
+
     }
 
     // Called from Game Manager
