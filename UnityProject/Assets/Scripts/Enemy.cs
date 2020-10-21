@@ -112,6 +112,7 @@ public class Enemy
         // Check if the enemy is dead.
         if(health < 0.0f)
         {
+            GameObject.Destroy(gameObject);
             markedForDeletion = true;
             return true;
         }
