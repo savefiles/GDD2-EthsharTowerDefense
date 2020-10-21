@@ -60,6 +60,7 @@ public class Enemy
 
         // Create a new object for this enemy based on type.
         gameObject = GameObject.Instantiate(enemyManager.enemyPrefabs[(int)type], position, Quaternion.identity);
+        gameObject.GetComponent<EnemyMB>().enemyRef = this;
     }
 
 
