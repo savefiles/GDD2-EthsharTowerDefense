@@ -1,117 +1,122 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public enum AttackType {
-    typeHitscan,
-    typeProjectile,
-}
-
 public enum TowerType {
-    archer,
-    magic,
-    siege
+    Type_Archer,
+    Type_Magic,
+    Type_Siege
 }
 
 public enum TowerLevel {
-    archer1,
-    archer2,
-    archer3a,
-    archer3b,
-    archer4a,
-    archer4b,
+    Level_1,
+    Level_2,
+    Level_3a,
+    Level_3b,
+    Level_4a,
+    Level_4b
+}
 
-    magic1,
-    magic2,
-    magic3a,
-    magic3b,
-    magic4a,
-    magic4b,
-
-    siege1,
-    siege2,
-    siege3a,
-    siege3b,
-    siege4a,
-    siege4b,
+public enum AttackType {
+    Type_Hitscan,
+    Type_Projectile
 }
 
 public class Tower : MonoBehaviour {
+    //  Search and select target
+    //  Fire on target
+
     //  ~Tower Variables
-    private TowerType towerType;
-    private TowerLevel towerLevel;
+    public TowerType towerType;            //  Type of Tower (Archer, Magic, Siege)
+    public TowerType TowerType => towerType;
+
+    public TowerLevel towerLevel;          //  Level of Tower (1, 2, 3a, 3b, 4a, 4b)
+    public TowerLevel TowerLevel => towerLevel;
 
     //  Combat Variables
-    private int towerRange;
-    private int towerRate;
-    private AttackType towerAttack;
-    private int towerDamage;
+    private float towerRange;
 
-    private float towerCoolBase;
-    private float towerCoolCurr;
+    private int towerFireRate;              //  Shots per minute of tower
+    private float towerCoolBase;            //  Reset value of cooldown
+    private float towerCoolCurr;            //  Current value of cooldown
 
-    private Transform towerTarget;
+    private AttackType towerAttack;         //  Type of Attack (Hitscan, Projectile)
+    private int towerDamage;                //  Amount of Damage
 
-    //  Creation Variables
-    public int towerSize;
+    //  Enemy Variables
+    private List<Transform> enemyList;      //  Grabs all enemies in range
+    private Transform towerTarget;          //  Current tower target
 
-    void Start() {
+    public void SetupTower(TowerType pType) {
+        switch (pType) {
+            //  Part - Archer Tower Setup
+            case TowerType.Type_Archer:
+                towerType = TowerType.Type_Archer;
+                towerAttack = AttackType.Type_Hitscan;
+                break;
+
+            //  Part - Magisc Tower Setup
+            case TowerType.Type_Magic:
+                towerType = TowerType.Type_Magic;
+                towerAttack = AttackType.Type_Hitscan;
+                break;
+
+            //  Part - Archer Tower Setup
+            case TowerType.Type_Siege:
+                towerType = TowerType.Type_Siege;
+                towerAttack = AttackType.Type_Projectile;
+                break;
+        }
+
+        //  Part - Enemy Setup
+        enemyList = new List<Transform>();
     }
 
-    //  Constructor
-
-    //  MainMethod - Tower Creation
-    //  Purpose : Sets up tower variables, used for creation and upgrades
-    public void TowerCreation(string pTower) {
-        switch (pTower) {
-            //  Part - Archer Level 1 Tower
-            case "archer":
-                towerType = TowerType.archer;
-                towerLevel = TowerLevel.archer1;
-
-                TowerCreationSub(5, 5, AttackType.typeHitscan, 5);
-
-                towerSize = 2;
+    public void InitializeTower() {
+        //  Part - Tower Base
+        switch (towerLevel) {
+            case TowerLevel.Level_1:
+                transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerBase_Level1;
                 break;
 
-            //  Part - Magic Level 1 Tower
-            case "magic":
-                towerType = TowerType.magic;
-                towerLevel = TowerLevel.magic1;
-
-                TowerCreationSub(5, 5, AttackType.typeHitscan, 5);
-
-                towerSize = 2;
+            case TowerLevel.Level_2:
+                transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerBase_Level2;
                 break;
 
-            //  Part - Siege Level 1 Tower
-            case "siege":
-                towerType = TowerType.siege;
-                towerLevel = TowerLevel.siege1;
+            case TowerLevel.Level_3a:
+            case TowerLevel.Level_3b:
+                transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerBase_Level3;
+                break;
 
-                TowerCreationSub(5, 5, AttackType.typeHitscan, 5);
+            case TowerLevel.Level_4a:
+            case TowerLevel.Level_4b:
+                //transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerBase_Level4;
+                break;
+        }
 
-                towerSize = 2;
+        //  Part - Tower Upper
+        switch (towerType) {
+            case TowerType.Type_Archer:
+                transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerUpper_Archer;
+                break;
+
+            case TowerType.Type_Magic:
+                transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerUpper_Magic;
+                break;
+
+            case TowerType.Type_Siege:
+                transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerUpper_Siege;
                 break;
         }
     }
 
-    //  SubMethod of TowerCreation - Tower Creation Sub
-    private void TowerCreationSub(int pRange, int pRate, AttackType pType, int pDamage) {
-        towerRange = pRange;
-
-        towerRate = pRate;
-        towerCoolBase = 60 / towerRate;
-        towerCoolCurr = towerCoolBase;
-
-        towerAttack = pType;
-        towerDamage = pDamage;
-    }
-
-    //  MainMethod - Update
-    //  Purpose : Handles cooldown and calls TowerAttack
     void Update() {
+        TowerTarget();
+
         if (towerCoolCurr <= 0) {
-            TowerAttack();
+            if (towerTarget != null) {
+                TowerAttack();
+            }
+
             towerCoolCurr = towerCoolBase;
         }
 
@@ -120,227 +125,188 @@ public class Tower : MonoBehaviour {
         }
     }
 
-    //  SubMethod of Update - Tower Attack
-    //  Purpose : Targets enemy and attacks
-    private void TowerAttack() {
-        //  Part - Enemy Target
-        if (Vector3.Distance(towerTarget.transform.position, transform.position) > towerRange) {
-            //  SubPart - Reset Target List
-            List<Transform> towerEnemies = new List<Transform>();
+    //  SubMethod of Update - Tower Target
+    //  Purpose : Targets Enemy
+    private void TowerTarget() {
+        //  Part - Reset Target List
+        if (towerTarget == null) {
+            enemyList.Clear();
+
             foreach (Enemy enemy in GameManager.instance.enemyManager.enemies) {
-                if (Vector3.Distance(enemy.gameObject.transform.position, transform.position) <= towerRange) {
-                    towerEnemies.Add(enemy.gameObject.transform);
+                if (Vector2.Distance(enemy.gameObject.transform.position, transform.position) <= towerRange) {
+                    enemyList.Add(enemy.gameObject.transform);
                 }
             }
 
-            //  SubPart - Target Enemy
-            for (int i = 0; i < towerEnemies.Count; i++) {
+            //  Part - Target Enemy
+            for (int i = 0; i < enemyList.Count; i++) {
                 //  MinorPart - First Enemy
                 if (i == 0) {
-                    towerTarget = towerEnemies[i];
+                    towerTarget = enemyList[i];
                 }
 
-                //  MinorPart - Enemy Ahead (Further Waypoint)
-                else if (towerEnemies[i].GetComponent<Enemy>().targetPositionIndex > towerTarget.GetComponent<Enemy>().targetPositionIndex) {
-                    towerTarget = towerEnemies[i];
+                //  SubPart - Enemy Ahead (Further Waypoint)
+                else if (enemyList[i].GetComponent<EnemyMB>().enemyRef.targetPositionIndex > towerTarget.GetComponent<EnemyMB>().enemyRef.targetPositionIndex) {
+                    towerTarget = enemyList[i];
                 }
 
-                //  MinorPart - Enemy Ahead (Same Waypoint)
-                else if (towerEnemies[i].GetComponent<Enemy>().timeSinceLastPoint > towerTarget.GetComponent<Enemy>().timeSinceLastPoint) {
-                    towerTarget = towerEnemies[i];
+                //  SubPart - Enemy Ahead (Same Waypoint)
+                else if (enemyList[i].GetComponent<EnemyMB>().enemyRef.timeSinceLastPoint > towerTarget.GetComponent<EnemyMB>().enemyRef.timeSinceLastPoint) {
+                    towerTarget = enemyList[i];
                 }
             }
         }
 
-        //  Part - Enemy Attack
-        else {
-            //  SubPart - Hitscan Tower (Archer, Magic)
-            if (towerAttack == AttackType.typeHitscan) {
-                towerTarget.GetComponent<Enemy>().TakeDamage(towerDamage);
-            }
+        //  Part - Tower Rotate
+        if (towerTarget != null) {
+            Vector3 diff = towerTarget.position - transform.position;
 
-            //  SubPart - Projectile Tower (Siege)
-            else if (towerAttack == AttackType.typeProjectile) {
+            diff.Normalize();
 
-            }
+            float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+            transform.GetChild(1).rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
         }
     }
 
-    //  MainMethod - Tower Upgrade
-    public void TowerUpgrade(int pSide) {
-        //  Part - Level 1 Tower
-        if (towerLevel == TowerLevel.archer1 || towerLevel == TowerLevel.magic1 || towerLevel == TowerLevel.siege1) {
-            switch (towerType) {
-                //  SubPart - Archer Level 1
-                case TowerType.archer:
-                    towerLevel = TowerLevel.archer2;
-                    ArcherUpgrade();
-                    break;
-
-                //  SubPart - Magic Level 1
-                case TowerType.magic:
-                    towerLevel = TowerLevel.magic2;
-                    MagicUpgrade();
-                    break;
-
-                //  SubPart - Siege Level 1
-                case TowerType.siege:
-                    towerLevel = TowerLevel.siege2;
-                    SiegeUpgrade();
-                    break;
-            }
+    //  SubMethod of Update - Tower Attack
+    //  Purpose : Attacks Enemy
+    private void TowerAttack() {
+        //  Part - Hitscan Tower (Archer, Magic)
+        if (towerAttack == AttackType.Type_Hitscan) {
+            towerTarget.GetComponent<EnemyMB>().enemyRef.TakeDamage(towerDamage);
         }
 
-        else if (pSide == 1) {
-            switch (towerType) {
-                case TowerType.archer:
-                    switch (towerLevel) {
-                        //  SubPart - Archer Level 2
-                        case TowerLevel.archer2:
-                            towerLevel = TowerLevel.archer3a;
-                            ArcherUpgrade();
-                            break;
+        //  Part - Projectile Tower (Siege)
+        else if (towerAttack == AttackType.Type_Projectile) {
 
-                        //  SubPart - Archer Level 3a
-                        case TowerLevel.archer3a:
-                            towerLevel = TowerLevel.archer4a;
-                            ArcherUpgrade();
-                            break;
-                    }
-                    break;
-
-                case TowerType.magic:
-                    switch (towerLevel) {
-                        //  SubPart - Magic Level 2
-                        case TowerLevel.magic2:
-                            towerLevel = TowerLevel.magic3a;
-                            MagicUpgrade();
-                            break;
-
-                        //  SubPart - Magic Level 3a
-                        case TowerLevel.archer3a:
-                            towerLevel = TowerLevel.magic4a;
-                            MagicUpgrade();
-                            break;
-                    }
-                    break;
-
-                case TowerType.siege:
-                    switch (towerLevel) {
-                        //  SubPart - Siege Level 2
-                        case TowerLevel.siege2:
-                            towerLevel = TowerLevel.siege3a;
-                            SiegeUpgrade();
-                            break;
-
-                        //  SubPart - Siege Level 3a
-                        case TowerLevel.archer3a:
-                            towerLevel = TowerLevel.siege4a;
-                            SiegeUpgrade();
-                            break;
-                    }
-                    break;
-            }
-        }
-
-        else if (pSide == 2) {
-            switch (towerType) {
-                case TowerType.archer:
-                    switch (towerLevel) {
-                        //  SubPart - Archer Level 2
-                        case TowerLevel.archer2:
-                            towerLevel = TowerLevel.archer3b;
-                            ArcherUpgrade();
-                            break;
-
-                        //  SubPart - Archer Level 3b
-                        case TowerLevel.archer3b:
-                            towerLevel = TowerLevel.archer4b;
-                            ArcherUpgrade();
-                            break;
-                    }
-                    break;
-
-                case TowerType.magic:
-                    switch (towerLevel) {
-                        //  SubPart - Magic Level 2
-                        case TowerLevel.magic2:
-                            towerLevel = TowerLevel.magic3b;
-                            MagicUpgrade();
-                            break;
-
-                        //  SubPart - Magic Level 3b
-                        case TowerLevel.magic3b:
-                            towerLevel = TowerLevel.magic4b;
-                            MagicUpgrade();
-                            break;
-                    }
-                    break;
-
-                case TowerType.siege:
-                    switch (towerLevel) {
-                        //  SubPart - Siege Level 2
-                        case TowerLevel.siege2:
-                            towerLevel = TowerLevel.siege3b;
-                            SiegeUpgrade();
-                            break;
-
-                        //  SubPart - Siege Level 3b
-                        case TowerLevel.siege3b:
-                            towerLevel = TowerLevel.siege4b;
-                            SiegeUpgrade();
-                            break;
-                    }
-                    break;
-            }
         }
     }
 
-    //  SubMethod of TowerUpgrade - Archer Upgrade
-    private void ArcherUpgrade() {
-        switch (towerLevel) {
-            case TowerLevel.archer2:
+    //  MainMethod - Upgrade Tower Main (param Tower Level)
+    //  Purpose : Calls sub method to setup stats
+    public void UpgradeTower_Main(TowerLevel pLevel) {
+        towerLevel = pLevel;
+
+        switch (towerType) {
+            //  Part - Archer Tower Upgrade
+            case TowerType.Type_Archer:
+                switch (towerLevel) {
+                    //  SubPart - Archer Tower Level 1
+                    case TowerLevel.Level_1:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+
+                    //  SubPart - Archer Tower Level 2
+                    case TowerLevel.Level_2:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+
+                    //  SubPart - Archer Tower Level 3a
+                    case TowerLevel.Level_3a:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+
+                    //  SubPart - Archer Tower Level 3b
+                    case TowerLevel.Level_3b:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+
+                    //  SubPart - Archer Tower Level 4a
+                    case TowerLevel.Level_4a:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+
+                    //  SubPart - Archer Tower Level 4b
+                    case TowerLevel.Level_4b:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+                }
                 break;
-            case TowerLevel.archer3a:
+
+            //  Part - Magic Tower Upgrade
+            case TowerType.Type_Magic:
+                switch (towerLevel) {
+                    //  SubPart - Magic Tower Level 1
+                    case TowerLevel.Level_1:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+
+                    //  SubPart - Magic Tower Level 2
+                    case TowerLevel.Level_2:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+
+                    //  SubPart - Magic Tower Level 3a
+                    case TowerLevel.Level_3a:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+
+                    //  SubPart - Magic Tower Level 3b
+                    case TowerLevel.Level_3b:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+
+                    //  SubPart - Magic Tower Level 4a
+                    case TowerLevel.Level_4a:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+
+                    //  SubPart - Magic Tower Level 4b
+                    case TowerLevel.Level_4b:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+                }
                 break;
-            case TowerLevel.archer3b:
-                break;
-            case TowerLevel.archer4a:
-                break;
-            case TowerLevel.archer4b:
+
+            //  Part - Siege Tower Upgrade
+            case TowerType.Type_Siege:
+                switch (towerLevel) {
+                    //  SubPart - Siege Tower Level 1
+                    case TowerLevel.Level_1:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+
+                    //  SubPart - Siege Tower Level 2
+                    case TowerLevel.Level_2:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+
+                    //  SubPart - Siege Tower Level 3a
+                    case TowerLevel.Level_3a:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+
+                    //  SubPart - Siege Tower Level 3b
+                    case TowerLevel.Level_3b:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+
+                    //  SubPart - Siege Tower Level 4a
+                    case TowerLevel.Level_4a:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+
+                    //  SubPart - Siege Tower Level 4b
+                    case TowerLevel.Level_4b:
+                        UpgradeTower_Sub(2f, 60, 10);
+                        break;
+                }
                 break;
         }
+
+        InitializeTower();
     }
 
-    //  SubMethod of TowerUpgrade - Magic Upgrade
-    private void MagicUpgrade() {
-        switch (towerLevel) {
-            case TowerLevel.magic2:
-                break;
-            case TowerLevel.magic3a:
-                break;
-            case TowerLevel.magic3b:
-                break;
-            case TowerLevel.magic4a:
-                break;
-            case TowerLevel.magic4b:
-                break;
-        }
-    }
+    //  SubMethod of UpgradeTower_Main - Upgrade Tower Sub (param Fire Rate, Damage)
+    //  Purpose : Setup combat states
+    private void UpgradeTower_Sub(float pRange, int pRate, int pDamage) {
+        //  Part - Combat Setup
+        towerRange = pRange;
 
-    //  SubMethod of TowerUpgrade - Siege Upgrade
-    private void SiegeUpgrade() {
-        switch (towerLevel) {
-            case TowerLevel.siege2:
-                break;
-            case TowerLevel.siege3a:
-                break;
-            case TowerLevel.siege3b:
-                break;
-            case TowerLevel.siege4a:
-                break;
-            case TowerLevel.siege4b:
-                break;
-        }
+        towerFireRate = pRate;
+        towerCoolBase = 60 / towerFireRate;
+        towerCoolCurr = 0;
+
+        towerDamage = pDamage;
     }
 }

@@ -1,90 +1,78 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class TowerManager{
-    //  Mana Variables
-    private int manaCurr;
-    public int ManaCurr => manaCurr;
+public class TowerManager {
 
-    private Dictionary<string, int> towerCost;
-    private Dictionary<string, int> towerSize;
+    //  _Unity Variables
+    private GameObject objTowerPrefab;
+    private GameObject objTowerSpawn;
+
+    //  Audio Variables
+
+    //  Image Variables
+    public Sprite towerBase_Level1;
+    public Sprite towerBase_Level2;
+    public Sprite towerBase_Level3;
+    //public Sprite towerBase_Level4;
+
+    public Sprite towerUpper_Archer;
+    public Sprite towerUpper_Magic;
+    public Sprite towerUpper_Siege;
 
     //  Tower Variables
-    private List<Transform> towers;
-
-    public Transform towerPrefab;
-
-    private Sprite mapMask;
+    private List<GameObject> towerList;
+    public List<GameObject> TowerList => towerList;
 
     public TowerManager() {
-        //  Part - Mana Setup
-        manaCurr = 0;
+        //  Part - _Unity Setup
+        objTowerPrefab = Resources.Load<GameObject>("Prefabs/Tower");
+        objTowerSpawn = GameObject.Find("Tower_Spawn");
 
-        towerCost = new Dictionary<string, int>();
-        towerCost.Add("archer1", 250);  // Arbitrary Values
+        //  Part - Audio Setup
 
-        towerSize = new Dictionary<string, int>();
-        towerSize.Add("archer1", 5);  // Arbitrary Values
+        //  Part - Image Setup
+        towerBase_Level1 = Resources.Load<Sprite>("Sprites/TowerBase_Level1");
+        towerBase_Level2 = Resources.Load<Sprite>("Sprites/TowerBase_Level2");
+        towerBase_Level3 = Resources.Load<Sprite>("Sprites/TowerBase_Level3");
+        //towerBase_Level4 = Resources.Load<Sprite>("Sprites/TowerBase_Level4");
+
+        towerUpper_Archer = Resources.Load<Sprite>("Sprites/TowerUpper_Archer");
+        towerUpper_Magic = Resources.Load<Sprite>("Sprites/TowerUpper_Magic");
+        towerUpper_Siege = Resources.Load<Sprite>("Sprites/TowerUpper_Siege");
 
         //  Part - Tower Setup
-        towers = new List<Transform>();
+        towerList = new List<GameObject>();
     }
 
-    void Update() {
-        //   Possible Mana Recovery
+    public bool SpawnCheck(float pSize) {
+        return SpawnTowerCheck(pSize) && SpawnPathCheck();
     }
 
-    public void TowerCreation(Vector3 pPos, string pTower) {
-        //  Part - Tower Location Check
-        bool towerPos = true;
-        int tempSize = towerSize[pTower];
-
-        //  >> SubPart - Path Location Check
-        towerPos = PathCheck(pPos, tempSize);
-
-        //  >> SubPart - Other Towers Check
-        if (towerPos == true) {
-            foreach (Transform tower in towers) {
-                if (Vector3.Distance(tower.transform.position, pPos) < (tower.GetComponent<Tower>().towerSize + tempSize)) {
-                    towerPos = false;
-                    break;
-                }
+    public bool SpawnTowerCheck(float pSize) {
+        foreach(GameObject tower in towerList) {
+            if (Vector2.Distance(tower.transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition)) < pSize) {
+                return false;
             }
         }
 
-        //  Part - Tower Mana Check
-        bool tempCost = (manaCurr >= towerCost[pTower]);
-
-        //  Part - Tower Creation
-        if (towerPos == true && tempCost == true) {
-            Transform tempTower = GameObject.Instantiate(towerPrefab, pPos, Quaternion.identity);
-            tempTower.GetComponent<Tower>().TowerCreation(pTower);
-            towers.Add(tempTower);
-        }
+        return true;
     }
 
-    public bool PathCheck(Vector3 pPos, int pSize) {
-        List<Vector3> levelPath = GameManager.instance.levelManager.currentLevel.worldPath;
+    private bool SpawnPathCheck() {
+        return true;
+    }
 
-        bool tempBool = true;
-        for (int i = 0; i < levelPath.Count - 1; i++) {
-            //  Part - Horizontal Path
-            if (levelPath[i].y == levelPath[i + 1].y) {
-                if (Mathf.Abs(pPos.y - levelPath[i].y) < pSize + 2.5) {
-                    tempBool = false;
-                    break;
-                }
-            }
+    public void SpawnTower(TowerType pType) {
+        //  Part - Instantiate Tower
+        Vector3 spawnPos = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, -1);
+        GameObject towerTemp = GameObject.Instantiate(objTowerPrefab, spawnPos, Quaternion.identity, objTowerSpawn.transform);
 
-            //  Part - Vertical Path
-            else if (levelPath[i].x == levelPath[i + 1].x) {
-                if (Mathf.Abs(pPos.x - levelPath[i].x) < pSize + 2.5) {
-                    tempBool = false;
-                    break;
-                }
-            }
-        }
+        //  Part - Setup Tower
+        towerTemp.GetComponent<Tower>().SetupTower(pType);
+        towerTemp.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_1);
+        towerTemp.GetComponent<Tower>().InitializeTower();
 
-        return tempBool;
+        //  Part - Add Tower to towerList
+        towerList.Add(towerTemp);
     }
 }

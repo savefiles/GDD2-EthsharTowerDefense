@@ -50,7 +50,7 @@ public class Level
 
     private Vector3 ConvertToWorldCoords(Vector2 point)
     {
-        Bounds spriteBounds = sr.bounds;
+        Bounds spriteBounds = sr.sprite.bounds;
         Vector2 topLeft = new Vector2(spriteBounds.center.x - spriteBounds.extents.x,
                                       spriteBounds.center.y + spriteBounds.extents.y);
         Vector3 worldPoint = new Vector3(topLeft.x + point.x * spriteBounds.size.x,
