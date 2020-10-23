@@ -8,6 +8,9 @@ public class TowerManager : MonoBehaviour {
     private GameObject objTowerSpawn;
 
     //  Audio Variables
+    public AudioClip sound_Archer;
+    public AudioClip sound_Magic;
+    public AudioClip sound_Siege;
 
     //  Image Variables
     public Sprite towerBase_Level1;
@@ -29,6 +32,9 @@ public class TowerManager : MonoBehaviour {
         objTowerSpawn = GameObject.Find("Tower_Spawn");
 
         //  Part - Audio Setup
+        sound_Archer = Resources.Load<AudioClip>("Audio/Sound_Archer");
+        sound_Magic = Resources.Load<AudioClip>("Audio/Sound_Magic");
+        sound_Siege = Resources.Load<AudioClip>("Audio/Sound_Siege");
 
         //  Part - Image Setup
         towerBase_Level1 = Resources.Load<Sprite>("Sprites/TowerBase_Level1");
@@ -76,7 +82,6 @@ public class TowerManager : MonoBehaviour {
         towerObj.GetComponent<TowerMB>().towerRef = new Tower();
 
         //  Part - Setup Tower
-        Debug.Log(towerObj.GetComponent<TowerMB>() + ", " + towerObj.GetComponent<TowerMB>().towerRef + ", " + towerObj + ", " + pType);
         towerObj.GetComponent<TowerMB>().towerRef.SetupTower(towerObj, pType);
         towerObj.GetComponent<TowerMB>().towerRef.UpgradeTower_Main(TowerLevel.Level_1);
         towerObj.GetComponent<TowerMB>().towerRef.InitializeTower();

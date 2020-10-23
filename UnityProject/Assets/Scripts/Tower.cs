@@ -22,9 +22,6 @@ public enum AttackType {
 }
 
 public class Tower {
-    //  Search and select target
-    //  Fire on target
-
     //  ~Tower Variables
     public GameObject towerActual;
 
@@ -33,6 +30,9 @@ public class Tower {
 
     public TowerLevel towerLevel;          //  Level of Tower (1, 2, 3a, 3b, 4a, 4b)
     public TowerLevel TowerLevel => towerLevel;
+
+    //  Audio Variables
+    private AudioSource towerSound;
 
     //  Combat Variables
     private float towerRange;
@@ -98,18 +98,21 @@ public class Tower {
                 break;
         }
 
-        //  Part - Tower Upper
+        //  Part - Tower Upper and Sound
         switch (towerType) {
             case TowerType.Type_Archer:
                 towerActual.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerUpper_Archer;
+                towerActual.GetComponent<AudioSource>().clip = GameManager.instance.towerManager.sound_Archer;
                 break;
 
             case TowerType.Type_Magic:
                 towerActual.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerUpper_Magic;
+                towerActual.GetComponent<AudioSource>().clip = GameManager.instance.towerManager.sound_Magic;
                 break;
 
             case TowerType.Type_Siege:
                 towerActual.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerUpper_Siege;
+                towerActual.GetComponent<AudioSource>().clip = GameManager.instance.towerManager.sound_Siege;
                 break;
         }
     }
@@ -197,6 +200,8 @@ public class Tower {
                 }
             }
         }
+
+        towerActual.GetComponent<AudioSource>().Play();
     }
 
     //  MainMethod - Upgrade Tower Main (param Tower Level)
