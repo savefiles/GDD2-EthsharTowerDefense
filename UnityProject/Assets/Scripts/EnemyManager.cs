@@ -23,6 +23,7 @@ public class EnemyManager
     private List<EnemyWave> upcomingWaves;                  // List of waves that are after the currently spawned waves.
 
     private bool hasGameStarted = false;                    // Don't actually start anything until the button is pressed for first time.
+    private int townHealth = 10;                            // The amount of hits a town can take.
 
     // Only allow three waves to spawn, keep track of the number of enemies/type to spawn.
 
@@ -58,13 +59,14 @@ public class EnemyManager
            
 
         // Update the existing enemies.
-        for (int i = enemies.Count - 1; i >= 0; i--) {
+        for (int i = 0; i < enemies.Count; i++) {
             if (enemies[i].markedForDeletion == true)
             {
                 enemies.RemoveAt(i);
+                i--;
             }
-
-            enemies[i].Update(dt);
+            else
+                enemies[i].Update(dt);
         }
 
         // Start the next wave (if applicable).
@@ -179,6 +181,16 @@ public class EnemyManager
         enemyWave.timeSinceLastSpawn = 0.0f;
 
         return enemyWave;
+    }
+
+    // Deal damage to the town, meaning an enemy has reached the end.
+    // - Bosses deal more damage, so we have the boss boolean
+    public void TakeTownDamage(bool boss)
+    {
+        if(boss)
+            townHealth -= 3;
+        else
+            townHealth -= 1;
     }
 
 
