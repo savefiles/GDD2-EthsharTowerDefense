@@ -13,15 +13,20 @@ public class Enemy
     private float timer;                // The amount of time this enemy has been alive.
     public float timeSinceLastPoint { get; private set; }   // The amount of time that has passed since the enemy left the last point.
 
-    private float health;                                   // Heath of the unit
+    private float health;                                   // Current health of the unit
+    private float maxHealth;                                // The amount of health this unit started with.
     private Vector3 position;                               // Current position on the screen.
     public int targetPositionIndex { get; private set; }    // The index in the position list of the target position.
     private float speed;                                    // The inverse of the amount of time it takes for the enemy to go from each position.
     private float distanceToNextPosition;                   // The distance between the last target and the current target.
 
-    public GameObject gameObject;      // The game object that the enemy is represented by in the scene.
 
-    public bool markedForDeletion;      // Flag that tells the EnemyManager that this enemy has reached the end or died.
+    public GameObject gameObject;      // The game object that the enemy is represented by in the scene.
+    private Transform healthBar;       // Reference to the health bar transform (used to shorten names)
+    private float healthBarScale;      // The default scale of the health bar (used to show damage taken).
+    private float widthToPos;          // Based on the health bar scale, convert from width to position.
+
+    public bool markedForDeletion;     // Flag that tells the EnemyManager that this enemy has reached the end or died.
 
     // Getters/Setters
 
@@ -41,7 +46,7 @@ public class Enemy
         switch (type)
         {
             case EnemyType.Normal:
-                health = 10.0f;
+                health = 15.0f;
                 speed = 2.0f;
                 break;
             case EnemyType.Fast:
@@ -57,10 +62,14 @@ public class Enemy
                 speed = 0.6f;
                 break;
         }
+        maxHealth = health;
 
         // Create a new object for this enemy based on type.
         gameObject = GameObject.Instantiate(enemyManager.enemyPrefabs[(int)type], position, Quaternion.identity);
         gameObject.GetComponent<EnemyMB>().enemyRef = this;
+        healthBar = gameObject.transform.GetChild(1).transform;
+        healthBarScale = healthBar.localScale.x;
+        widthToPos = 0.221f / healthBarScale;
     }
 
 
@@ -70,6 +79,14 @@ public class Enemy
         timer += dt;            // Update the current timer.
         timeSinceLastPoint += dt;
         Move();                 // Move the enemy.
+
+        // Update the health bar based on the enemy's current health.
+        healthBar.localScale = new Vector3((health / maxHealth) * healthBarScale,
+                                           healthBar.localScale.y,
+                                           healthBar.localScale.z);
+        healthBar.localPosition = new Vector3((0.5f - (health / (2 * maxHealth))) * healthBarScale * -widthToPos,
+                                              healthBar.localPosition.y,
+                                              healthBar.localPosition.z);
     }
 
     // Move the enemy along the path in the enemy manager.
@@ -92,13 +109,14 @@ public class Enemy
             {
                 GameObject.Destroy(gameObject);
                 markedForDeletion = true;
-                //enemyManager.enemies.Remove(this);
+                // Deal damage to town
+                enemyManager.TakeTownDamage(type == EnemyType.Boss);
             }
             else
             {
                 // CHANGE DIRECTION THAT THE ENEMY IS FACING.
                 Vector3 newForwardVector = Vector3.Normalize(enemyManager.enemyPath[targetPositionIndex] - enemyManager.enemyPath[targetPositionIndex - 1]);
-                gameObject.transform.right = (Vector2) newForwardVector;
+                gameObject.transform.GetChild(0).transform.right = (Vector2) newForwardVector;
 
                 distanceToNextPosition = Vector3.Distance(enemyManager.enemyPath[targetPositionIndex - 1], enemyManager.enemyPath[targetPositionIndex]);
             }
@@ -110,7 +128,7 @@ public class Enemy
     {
         health -= damage;
         // Check if the enemy is dead.
-        if(health < 0.0f)
+        if(health <= 0.1f)
         {
             GameObject.Destroy(gameObject);
             markedForDeletion = true;

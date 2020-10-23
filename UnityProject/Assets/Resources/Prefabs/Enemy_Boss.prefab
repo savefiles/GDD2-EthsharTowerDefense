@@ -13,11 +13,27 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 9d64ef9a93bec5042bf6078d7fef6abb,
         type: 3}
+    - target: {fileID: 631413043009055027, guid: e278c826598aec640870ef87a14fb004,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 631413043009055027, guid: e278c826598aec640870ef87a14fb004,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 803055147453695236, guid: e278c826598aec640870ef87a14fb004,
         type: 3}
       propertyPath: m_Name
       value: Enemy_Boss
       objectReference: {fileID: 0}
+    - target: {fileID: 4430195992491048435, guid: e278c826598aec640870ef87a14fb004,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9d64ef9a93bec5042bf6078d7fef6abb,
+        type: 3}
     - target: {fileID: 5444515742231669243, guid: e278c826598aec640870ef87a14fb004,
         type: 3}
       propertyPath: m_LocalPosition.x
