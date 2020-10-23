@@ -18,7 +18,7 @@ public class UIManager {
     private const float towerSpawnSize = 0.3f;
 
     //  Tower Variables
-    private GameObject towerSelected;
+    private TowerMB towerSelected;
 
     //  UI Variables
     private GameObject buttons_NextWave;
@@ -71,19 +71,19 @@ public class UIManager {
         buttons_UpgradeArcher = GameObject.Find("Buttons_UpgradeArcher");
 
         buttons_UALvl2 = buttons_UpgradeArcher.transform.GetChild(0).gameObject;
-        buttons_UALvl2.GetComponent<Button>().onClick.AddListener(() => { towerSelected.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_2); ResetIconDisplay();  });
+        buttons_UALvl2.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_2); ResetIconDisplay();  });
 
         buttons_UALvl3a = buttons_UpgradeArcher.transform.GetChild(1).gameObject;
-        buttons_UALvl3a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_3a); ResetIconDisplay(); });
+        buttons_UALvl3a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3a); ResetIconDisplay(); });
 
         buttons_UALvl3b = buttons_UpgradeArcher.transform.GetChild(2).gameObject;
-        buttons_UALvl3b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_3b); ResetIconDisplay(); });
+        buttons_UALvl3b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3b); ResetIconDisplay(); });
 
         buttons_UALvl4a = buttons_UpgradeArcher.transform.GetChild(3).gameObject;
-        buttons_UALvl4a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_4a); ResetIconDisplay(); });
+        buttons_UALvl4a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4a); ResetIconDisplay(); });
 
         buttons_UALvl4b = buttons_UpgradeArcher.transform.GetChild(4).gameObject;
-        buttons_UALvl4b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_4b); ResetIconDisplay(); });
+        buttons_UALvl4b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4b); ResetIconDisplay(); });
 
         buttons_UpgradeArcher.SetActive(false);
 
@@ -91,19 +91,19 @@ public class UIManager {
         buttons_UpgradeMagic = GameObject.Find("Buttons_UpgradeMagic");
 
         buttons_UMLvl2 = buttons_UpgradeMagic.transform.GetChild(0).gameObject;
-        buttons_UMLvl2.GetComponent<Button>().onClick.AddListener(() => { towerSelected.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_2); ResetIconDisplay(); });
+        buttons_UMLvl2.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_2); ResetIconDisplay(); });
 
         buttons_UMLvl3a = buttons_UpgradeMagic.transform.GetChild(1).gameObject;
-        buttons_UMLvl3a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_3a); ResetIconDisplay(); });
+        buttons_UMLvl3a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3a); ResetIconDisplay(); });
 
         buttons_UMLvl3b = buttons_UpgradeMagic.transform.GetChild(2).gameObject;
-        buttons_UMLvl3b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_3b); ResetIconDisplay(); });
+        buttons_UMLvl3b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3b); ResetIconDisplay(); });
 
         buttons_UMLvl4a = buttons_UpgradeMagic.transform.GetChild(3).gameObject;
-        buttons_UMLvl4a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_4a); ResetIconDisplay(); });
+        buttons_UMLvl4a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4a); ResetIconDisplay(); });
 
         buttons_UMLvl4b = buttons_UpgradeMagic.transform.GetChild(4).gameObject;
-        buttons_UMLvl4b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_4b); ResetIconDisplay(); });
+        buttons_UMLvl4b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4b); ResetIconDisplay(); });
 
         buttons_UpgradeMagic.SetActive(false);
 
@@ -111,19 +111,19 @@ public class UIManager {
         buttons_UpgradeSiege = GameObject.Find("Buttons_UpgradeSiege");
 
         buttons_USLvl2 = buttons_UpgradeSiege.transform.GetChild(0).gameObject;
-        buttons_USLvl2.GetComponent<Button>().onClick.AddListener(() => { towerSelected.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_2); ResetIconDisplay(); });
+        buttons_USLvl2.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_2); ResetIconDisplay(); });
 
         buttons_USLvl3a = buttons_UpgradeSiege.transform.GetChild(1).gameObject;
-        buttons_USLvl3a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_3a); ResetIconDisplay(); });
+        buttons_USLvl3a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3a); ResetIconDisplay(); });
 
         buttons_USLvl3b = buttons_UpgradeSiege.transform.GetChild(2).gameObject;
-        buttons_USLvl3b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_3b); ResetIconDisplay(); });
+        buttons_USLvl3b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3b); ResetIconDisplay(); });
 
         buttons_USLvl4a = buttons_UpgradeSiege.transform.GetChild(3).gameObject;
-        buttons_USLvl4a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_4a); ResetIconDisplay(); });
+        buttons_USLvl4a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4a); ResetIconDisplay(); });
 
         buttons_USLvl4b = buttons_UpgradeSiege.transform.GetChild(4).gameObject;
-        buttons_USLvl4b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_4b); ResetIconDisplay(); });
+        buttons_USLvl4b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4b); ResetIconDisplay(); });
 
         buttons_UpgradeSiege.SetActive(false);
 
@@ -188,16 +188,15 @@ public class UIManager {
 
     private void UIUpgradeTower() {
         //  Part - Select Tower
-        foreach(GameObject tower in tm.TowerList) {
-            if (Vector2.Distance(tower.transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition)) < towerSpawnSize) {
+        foreach(TowerMB tower in tm.TowerList) {
+            if (Vector2.Distance(tower.towerRef.towerActual.transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition)) < towerSpawnSize) {
                 towerSelected = tower;
                 break;
             }
         }
 
-        if (towerSelected.GetComponent<Tower>().towerLevel != TowerLevel.Level_4a && towerSelected.GetComponent<Tower>().towerLevel != TowerLevel.Level_4b) {
-            Debug.Log(towerSelected.GetComponent<Tower>().towerLevel);
-            DisplayUpgrades(towerSelected.GetComponent<Tower>().TowerType, towerSelected.GetComponent<Tower>().TowerLevel);
+        if (towerSelected.towerRef.towerLevel != TowerLevel.Level_4a && towerSelected.towerRef.towerLevel != TowerLevel.Level_4b) {
+            DisplayUpgrades(towerSelected.towerRef.TowerType, towerSelected.towerRef.TowerLevel);
         }
     }
 

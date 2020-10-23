@@ -21,11 +21,13 @@ public enum AttackType {
     Type_Projectile
 }
 
-public class Tower : MonoBehaviour {
+public class Tower {
     //  Search and select target
     //  Fire on target
 
     //  ~Tower Variables
+    public GameObject towerActual;
+
     public TowerType towerType;            //  Type of Tower (Archer, Magic, Siege)
     public TowerType TowerType => towerType;
 
@@ -34,6 +36,7 @@ public class Tower : MonoBehaviour {
 
     //  Combat Variables
     private float towerRange;
+    private float towerImpactRange = 0.2f;
 
     private int towerFireRate;              //  Shots per minute of tower
     private float towerCoolBase;            //  Reset value of cooldown
@@ -46,7 +49,9 @@ public class Tower : MonoBehaviour {
     private List<Transform> enemyList;      //  Grabs all enemies in range
     private Transform towerTarget;          //  Current tower target
 
-    public void SetupTower(TowerType pType) {
+    public void SetupTower(GameObject pTower, TowerType pType) {
+        towerActual = pTower;
+
         switch (pType) {
             //  Part - Archer Tower Setup
             case TowerType.Type_Archer:
@@ -75,16 +80,16 @@ public class Tower : MonoBehaviour {
         //  Part - Tower Base
         switch (towerLevel) {
             case TowerLevel.Level_1:
-                transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerBase_Level1;
+                towerActual.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerBase_Level1;
                 break;
 
             case TowerLevel.Level_2:
-                transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerBase_Level2;
+                towerActual.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerBase_Level2;
                 break;
 
             case TowerLevel.Level_3a:
             case TowerLevel.Level_3b:
-                transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerBase_Level3;
+                towerActual.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerBase_Level3;
                 break;
 
             case TowerLevel.Level_4a:
@@ -96,20 +101,20 @@ public class Tower : MonoBehaviour {
         //  Part - Tower Upper
         switch (towerType) {
             case TowerType.Type_Archer:
-                transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerUpper_Archer;
+                towerActual.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerUpper_Archer;
                 break;
 
             case TowerType.Type_Magic:
-                transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerUpper_Magic;
+                towerActual.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerUpper_Magic;
                 break;
 
             case TowerType.Type_Siege:
-                transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerUpper_Siege;
+                towerActual.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite = GameManager.instance.towerManager.towerUpper_Siege;
                 break;
         }
     }
 
-    void Update() {
+    public void Update() {
         TowerTarget();
 
         if (towerCoolCurr <= 0) {
@@ -126,14 +131,13 @@ public class Tower : MonoBehaviour {
     }
 
     //  SubMethod of Update - Tower Target
-    //  Purpose : Targets Enemy
     private void TowerTarget() {
         //  Part - Reset Target List
         if (towerTarget == null) {
             enemyList.Clear();
 
             foreach (Enemy enemy in GameManager.instance.enemyManager.enemies) {
-                if (Vector2.Distance(enemy.gameObject.transform.position, transform.position) <= towerRange) {
+                if (Vector2.Distance(enemy.gameObject.transform.position, towerActual.transform.position) <= towerRange) {
                     enemyList.Add(enemy.gameObject.transform);
                 }
             }
@@ -159,31 +163,43 @@ public class Tower : MonoBehaviour {
 
         //  Part - Tower Rotate
         if (towerTarget != null) {
-            Vector3 diff = towerTarget.position - transform.position;
+            Vector3 diff = towerTarget.position - towerActual.transform.position;
 
             diff.Normalize();
 
             float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
-            transform.GetChild(1).rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
+            towerActual.transform.GetChild(1).rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
         }
     }
 
     //  SubMethod of Update - Tower Attack
-    //  Purpose : Attacks Enemy
     private void TowerAttack() {
         //  Part - Hitscan Tower (Archer, Magic)
         if (towerAttack == AttackType.Type_Hitscan) {
             towerTarget.GetComponent<EnemyMB>().enemyRef.TakeDamage(towerDamage);
+
+            if (towerTarget.GetComponent<EnemyMB>().enemyRef.markedForDeletion == true) {
+                towerTarget = null;
+            }
         }
 
         //  Part - Projectile Tower (Siege)
         else if (towerAttack == AttackType.Type_Projectile) {
+            Vector2 impactPos = towerTarget.transform.position;
 
+            foreach (Enemy enemy in GameManager.instance.enemyManager.enemies) {
+                if (Vector2.Distance(enemy.gameObject.transform.position, impactPos) <= towerImpactRange) {
+                    enemy.gameObject.GetComponent<EnemyMB>().enemyRef.TakeDamage(towerDamage);
+
+                    if (towerTarget.GetComponent<EnemyMB>().enemyRef.markedForDeletion == true) {
+                        towerTarget = null;
+                    }
+                }
+            }
         }
     }
 
     //  MainMethod - Upgrade Tower Main (param Tower Level)
-    //  Purpose : Calls sub method to setup stats
     public void UpgradeTower_Main(TowerLevel pLevel) {
         towerLevel = pLevel;
 
@@ -298,7 +314,6 @@ public class Tower : MonoBehaviour {
     }
 
     //  SubMethod of UpgradeTower_Main - Upgrade Tower Sub (param Fire Rate, Damage)
-    //  Purpose : Setup combat states
     private void UpgradeTower_Sub(float pRange, int pRate, int pDamage) {
         //  Part - Combat Setup
         towerRange = pRange;

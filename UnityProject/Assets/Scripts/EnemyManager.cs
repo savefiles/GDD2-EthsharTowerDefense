@@ -58,14 +58,13 @@ public class EnemyManager
            
 
         // Update the existing enemies.
-        for (int i = 0; i < enemies.Count; i++)
-        {
-            enemies[i].Update(dt);
+        for (int i = enemies.Count - 1; i >= 0; i--) {
             if (enemies[i].markedForDeletion == true)
             {
                 enemies.RemoveAt(i);
-                i--;
             }
+
+            enemies[i].Update(dt);
         }
 
         // Start the next wave (if applicable).

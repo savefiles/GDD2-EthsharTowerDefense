@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class TowerManager {
+public class TowerManager : MonoBehaviour {
 
     //  _Unity Variables
     private GameObject objTowerPrefab;
@@ -20,8 +20,8 @@ public class TowerManager {
     public Sprite towerUpper_Siege;
 
     //  Tower Variables
-    private List<GameObject> towerList;
-    public List<GameObject> TowerList => towerList;
+    private List<TowerMB> towerList;
+    public List<TowerMB> TowerList => towerList;
 
     public TowerManager() {
         //  Part - _Unity Setup
@@ -41,7 +41,13 @@ public class TowerManager {
         towerUpper_Siege = Resources.Load<Sprite>("Sprites/TowerUpper_Siege");
 
         //  Part - Tower Setup
-        towerList = new List<GameObject>();
+        towerList = new List<TowerMB>();
+    }
+
+    public void Update() {
+        foreach(TowerMB tower in towerList) {
+            tower.towerRef.Update();
+        }
     }
 
     public bool SpawnCheck(float pSize) {
@@ -49,8 +55,8 @@ public class TowerManager {
     }
 
     public bool SpawnTowerCheck(float pSize) {
-        foreach(GameObject tower in towerList) {
-            if (Vector2.Distance(tower.transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition)) < pSize) {
+        foreach(TowerMB tower in towerList) {
+            if (Vector2.Distance(tower.towerRef.towerActual.transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition)) < pSize) {
                 return false;
             }
         }
@@ -65,14 +71,17 @@ public class TowerManager {
     public void SpawnTower(TowerType pType) {
         //  Part - Instantiate Tower
         Vector3 spawnPos = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, -1);
-        GameObject towerTemp = GameObject.Instantiate(objTowerPrefab, spawnPos, Quaternion.identity, objTowerSpawn.transform);
+        GameObject towerObj = GameObject.Instantiate(objTowerPrefab, spawnPos, Quaternion.identity, objTowerSpawn.transform);
+
+        towerObj.GetComponent<TowerMB>().towerRef = new Tower();
 
         //  Part - Setup Tower
-        towerTemp.GetComponent<Tower>().SetupTower(pType);
-        towerTemp.GetComponent<Tower>().UpgradeTower_Main(TowerLevel.Level_1);
-        towerTemp.GetComponent<Tower>().InitializeTower();
+        Debug.Log(towerObj.GetComponent<TowerMB>() + ", " + towerObj.GetComponent<TowerMB>().towerRef + ", " + towerObj + ", " + pType);
+        towerObj.GetComponent<TowerMB>().towerRef.SetupTower(towerObj, pType);
+        towerObj.GetComponent<TowerMB>().towerRef.UpgradeTower_Main(TowerLevel.Level_1);
+        towerObj.GetComponent<TowerMB>().towerRef.InitializeTower();
 
         //  Part - Add Tower to towerList
-        towerList.Add(towerTemp);
+        towerList.Add(towerObj.GetComponent<TowerMB>());
     }
 }

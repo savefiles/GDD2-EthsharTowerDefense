@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
 
         uiManager.Update();
 
-        //towerManager.Update();
+        towerManager.Update();
     }
 
 }
