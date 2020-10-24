@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class TowerManager : MonoBehaviour {
+public class TowerManager {
 
     //  _Unity Variables
     private GameObject objTowerPrefab;

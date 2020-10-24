@@ -219,18 +219,19 @@ public class UIManager {
     public void OnWaveSpawn()
     {
         // Skip the first instance of this function call.
-        if (em.hasGameStarted == false)
-            return;
+        if (em.hasGameStarted == true)
+        { 
+            // Shift the third box in list to the ticker mark, move all boxes.
+            for (int i = 0; i < spawnedTickers.Count; i++)
+            {
+                spawnedTickers[i].transform.localPosition = canvas.transform.worldToLocalMatrix * (redBarLoc + (i - 3) * boxLength);
+            }
 
-        // Shift the third box in list to the ticker mark, move all boxes.
-        for (int i = 0; i < spawnedTickers.Count; i++)
-        {
-            spawnedTickers[i].transform.localPosition = canvas.transform.worldToLocalMatrix * (redBarLoc + (i - 3) * boxLength);
+            // Remove the first box in list.
+            GameObject.Destroy(spawnedTickers[0]);
+            spawnedTickers.RemoveAt(0);
         }
 
-        // Remove the first box in list.
-        GameObject.Destroy(spawnedTickers[0]);
-        spawnedTickers.RemoveAt(0);
 
         // Add newest wave to end of list.
         spawnedTickers.Add(GameObject.Instantiate(tickerPrefabs[(int) em.upcomingWaves[em.upcomingWaves.Count - 1].enemyTypeToSpawn],

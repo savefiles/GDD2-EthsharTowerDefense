@@ -15,6 +15,7 @@ public class Enemy
 
     private float health;                                   // Current health of the unit
     private float maxHealth;                                // The amount of health this unit started with.
+    private float difficultyScalar;                         // The difficulty of this wave (for points).
     private Vector3 position;                               // Current position on the screen.
     public int targetPositionIndex { get; private set; }    // The index in the position list of the target position.
     private float speed;                                    // The inverse of the amount of time it takes for the enemy to go from each position.
@@ -29,13 +30,14 @@ public class Enemy
 
     // Getters/Setters
 
-    public Enemy(EnemyType type, EnemyManager enemyManager)
+    public Enemy(EnemyType type, float difficultyScalar, EnemyManager enemyManager)
     {
         this.enemyManager = enemyManager;
         this.type = type;
 
         // Instantiate the variables.
         health = 10;
+        this.difficultyScalar = difficultyScalar;
         targetPositionIndex = 1;
         position = enemyManager.enemyPath[0];
         markedForDeletion = false;
@@ -106,8 +108,7 @@ public class Enemy
             // If the enemy reached the end of the path
             if (targetPositionIndex == enemyManager.enemyPath.Count)
             {
-                GameObject.Destroy(gameObject);
-                markedForDeletion = true;
+                Perish();
                 // Deal damage to town
                 enemyManager.TakeTownDamage(type == EnemyType.Boss);
             }
@@ -129,11 +130,20 @@ public class Enemy
         // Check if the enemy is dead.
         if(health <= 0.1f)
         {
-            GameObject.Destroy(gameObject);
-            markedForDeletion = true;
+            Perish();
             return true;
         }
         return false;
+    }
+
+    // Die
+    private void Perish()
+    {
+        GameObject.Destroy(gameObject);
+        markedForDeletion = true;
+
+        // Add points to game manager.
+        GameManager.instance.points += difficultyScalar * 100;
     }
 }
 

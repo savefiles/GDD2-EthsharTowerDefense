@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,10 +13,10 @@ public class GameManager : MonoBehaviour
     public TowerManager towerManager;
     public LevelManager levelManager;
     public UIManager    uiManager;
-
-    public int round = 0;
-    public float FPS;
-    public float timer;
+    
+    // Points
+    public float points;
+    private GameObject pointCounter;
 
     // Start is called before the first frame update
     void Start()
@@ -32,21 +33,21 @@ public class GameManager : MonoBehaviour
         levelManager = new LevelManager();
         uiManager    = new UIManager();
 
-        timer = 0.0f;
+        // Get a reference to the point counter.
+        pointCounter = GameObject.Find("Point_Counter");
+
     }
 
     // Update is called once per frame
     void Update()
     {
         float dt = Time.deltaTime;
-        FPS = 1/dt;
-        timer += dt;
         enemyManager.Update(dt);
-        round = enemyManager.roundCounter;
-
         uiManager.Update(dt);
-
         towerManager.Update();
+
+        // Update point counter
+        pointCounter.GetComponent<Text>().text = "Points: " + points;
     }
 
 }
