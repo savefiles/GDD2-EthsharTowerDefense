@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 // UI Manager class
@@ -9,6 +10,9 @@ public class UIManager {
     //  Manager Variables
     TowerManager tm;
     EnemyManager em;
+
+    // Canvas game object
+    GameObject canvas;
 
     //  Spawn Variables
     private bool towerSpawnActive;
@@ -47,10 +51,19 @@ public class UIManager {
 
     private GameObject towerIcon;
 
+    // Variables for the bottom ticker
+    private List<GameObject> tickerPrefabs;
+    private List<GameObject> spawnedTickers;
+    private EnemyType previousWave;
+    private Vector3 redBarLoc;
+    private Vector3 boxLength;
+    private Vector3 speed;
+
     public UIManager() {
         //  Part - Manager Setup
         tm = GameManager.instance.towerManager;
         em = GameManager.instance.enemyManager;
+        canvas = GameObject.Find("Canvas");
 
         //  Part - Spawn Setup
         towerSpawnActive = false;
@@ -130,9 +143,36 @@ public class UIManager {
         //  >> SubPart - Tower Icon Setup
         towerIcon = GameObject.Find("Tower_Icon");
         towerIcon.SetActive(false);
+
+        // Get references to the ticker prefabs.
+        tickerPrefabs = new List<GameObject>();
+        tickerPrefabs.Add(Resources.Load<GameObject>("Prefabs/Ticker_Normal"));
+        tickerPrefabs.Add(Resources.Load<GameObject>("Prefabs/Ticker_Fast"));
+        tickerPrefabs.Add(Resources.Load<GameObject>("Prefabs/Ticker_Tank"));
+        tickerPrefabs.Add(Resources.Load<GameObject>("Prefabs/Ticker_Boss"));
+        tickerPrefabs.Add(Resources.Load<GameObject>("Prefabs/Ticker_Blank"));
+
+        // Set the default positions.
+        //redBarLoc = new Vector3(-364.0f, -475.0f, 0.0f);
+        //boxLength = new Vector3(195.0f, 0.0f, 0.0f);
+        redBarLoc = new Vector3(-3.38f, -4.4f, 0.0f);
+        boxLength = new Vector3(1.75f, 0.0f, 0.0f);
+        speed = boxLength / em.totalWaveTime;
+
+        // Spawn tickers based on the first few waves.
+        spawnedTickers = new List<GameObject>();
+        spawnedTickers.Add(GameObject.Instantiate(tickerPrefabs[4], redBarLoc - 2 * boxLength, Quaternion.identity, canvas.transform));
+        spawnedTickers.Add(GameObject.Instantiate(tickerPrefabs[4], redBarLoc - 1 * boxLength, Quaternion.identity, canvas.transform));
+        for (int i = 0; i < em.upcomingWaves.Count; i++)
+        {
+            spawnedTickers.Add(GameObject.Instantiate(tickerPrefabs[(int)em.upcomingWaves[i].enemyTypeToSpawn], 
+                               redBarLoc + i * boxLength, 
+                               Quaternion.identity, 
+                               canvas.transform));
+        }
     }
     
-    public void Update() {
+    public void Update(float dt) {
         //  Part - Tower Icon Control
         if (towerSpawnActive == true) {
             TowerIconControl();
@@ -162,8 +202,46 @@ public class UIManager {
                 ResetIconDisplay();
             }
         }
+
+
+        // Part - Bottom Ticker
+        if(em.hasGameStarted == false)
+            return;
+        for(int i = 0; i < spawnedTickers.Count; i++)
+        {
+            // Move the ticker to the left.
+            spawnedTickers[i].transform.position -= speed * dt;
+        }
+
     }
 
+    // Function that gets called from enemy manager when a wave is spawned.
+    public void OnWaveSpawn()
+    {
+        // Skip the first instance of this function call.
+        if (em.hasGameStarted == false)
+            return;
+
+        // Shift the third box in list to the ticker mark, move all boxes.
+        for (int i = 0; i < spawnedTickers.Count; i++)
+        {
+            spawnedTickers[i].transform.localPosition = canvas.transform.worldToLocalMatrix * (redBarLoc + (i - 3) * boxLength);
+        }
+
+        // Remove the first box in list.
+        GameObject.Destroy(spawnedTickers[0]);
+        spawnedTickers.RemoveAt(0);
+
+        // Add newest wave to end of list.
+        spawnedTickers.Add(GameObject.Instantiate(tickerPrefabs[(int) em.upcomingWaves[em.upcomingWaves.Count - 1].enemyTypeToSpawn],
+                   redBarLoc + (spawnedTickers.Count - 2) * boxLength,
+                   Quaternion.identity,
+                   canvas.transform));
+    }
+
+
+
+    #region Tower Functions
     private void TowerIconControl() {
         towerIcon.transform.position = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, -1);
         towerIcon.GetComponent<SpriteRenderer>().color = tm.SpawnCheck(towerSpawnSize) ? Color.green : Color.red;
@@ -348,4 +426,5 @@ public class UIManager {
         buttons_UpgradeMagic.SetActive(false);
         buttons_UpgradeSiege.SetActive(false);
     }
+    #endregion
 }

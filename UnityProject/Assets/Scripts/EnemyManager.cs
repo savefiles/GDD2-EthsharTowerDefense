@@ -15,14 +15,14 @@ public class EnemyManager
     public int roundCounter = 0;                            // Determines which enemies to spawn.
     private float timeSinceWaveStart = 0.0f;                // The amount of seconds since the wave started.
 
-    private const float TOTALWAVETIME = 8.0f;               // The amount of time from the start of spawning until next wave.
+    public  float totalWaveTime = 8.0f;                     // The amount of time from the start of spawning until next wave.
     private const float SPAWNINGTIMEPERWAVE = 4.0f;         // The amount of time it takes to spawn all enemies in a wave.
     private const int   ROUNDSPERBOSS = 3;                  // How many rounds are there until a boss spawn (fixed).
 
     private List<EnemyWave> currentlySpawnedWaves;          // List of waves that are currently on the screen.
-    private List<EnemyWave> upcomingWaves;                  // List of waves that are after the currently spawned waves.
+    public List<EnemyWave> upcomingWaves;                  // List of waves that are after the currently spawned waves.
 
-    private bool hasGameStarted = false;                    // Don't actually start anything until the button is pressed for first time.
+    public bool hasGameStarted = false;                    // Don't actually start anything until the button is pressed for first time.
     private int townHealth = 10;                            // The amount of hits a town can take.
 
     // Only allow three waves to spawn, keep track of the number of enemies/type to spawn.
@@ -70,7 +70,7 @@ public class EnemyManager
         }
 
         // Start the next wave (if applicable).
-        if (timeSinceWaveStart > TOTALWAVETIME)
+        if (timeSinceWaveStart > totalWaveTime)
         {
             // Spawn the first wave from upcoming waves.
             SpawnNextWave();
@@ -89,6 +89,18 @@ public class EnemyManager
             // Get the enemy type of the next wave.
             EnemyType newWaveEnemyType = EnemyType.Normal;
             upcomingWaves.Add(GenerateWave(roundCounter + i + 1, newWaveEnemyType));
+        }
+
+        // Generate random waves
+        for(int i = 3; i < 6; i++)
+        {
+            EnemyType newWaveEnemyType;
+            if ((roundCounter + i + 1) % ROUNDSPERBOSS == 0)
+                newWaveEnemyType = EnemyType.Boss;
+            else
+                newWaveEnemyType = (EnemyType)Random.Range(0, 3);
+
+            upcomingWaves.Add(GenerateWave(roundCounter + upcomingWaves.Count, newWaveEnemyType));
         }
     }
 
@@ -143,9 +155,14 @@ public class EnemyManager
         roundCounter += 1;
         upcomingWaves.Add(GenerateWave(roundCounter + upcomingWaves.Count, newWaveEnemyType));
 
+        // Call the listener in UI manager
+        GameManager.instance.uiManager.OnWaveSpawn();
+
         // If the game hasn't started yet, start it.
         if (hasGameStarted == false)
             hasGameStarted = true;
+
+
     }
 
 
@@ -178,7 +195,7 @@ public class EnemyManager
         enemyWave.enemiesLeftToSpawn = Mathf.CeilToInt(5 * difficultyScalar * enemyAmountScalar);
         enemyWave.spawnRate = SPAWNINGTIMEPERWAVE / (float) enemyWave.enemiesLeftToSpawn;
         enemyWave.enemyTypeToSpawn = enemyType;
-        enemyWave.timeSinceLastSpawn = 0.0f;
+        enemyWave.timeSinceLastSpawn = 10.0f;   // Force spawn the first frame.
 
         return enemyWave;
     }

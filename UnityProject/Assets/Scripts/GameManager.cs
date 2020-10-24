@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
         enemyManager.Update(dt);
         round = enemyManager.roundCounter;
 
-        uiManager.Update();
+        uiManager.Update(dt);
 
         towerManager.Update();
     }
