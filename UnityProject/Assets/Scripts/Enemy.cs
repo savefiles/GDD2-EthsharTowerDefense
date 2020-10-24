@@ -20,7 +20,6 @@ public class Enemy
     private float speed;                                    // The inverse of the amount of time it takes for the enemy to go from each position.
     private float distanceToNextPosition;                   // The distance between the last target and the current target.
 
-
     public GameObject gameObject;      // The game object that the enemy is represented by in the scene.
     private Transform healthBar;       // Reference to the health bar transform (used to shorten names)
     private float healthBarScale;      // The default scale of the health bar (used to show damage taken).
@@ -92,7 +91,7 @@ public class Enemy
     // Move the enemy along the path in the enemy manager.
     private void Move()
     {
-        float percent = timeSinceLastPoint / (distanceToNextPosition / speed);            // Calculate the percentage between the last and current target postion
+        float percent = timeSinceLastPoint / (distanceToNextPosition / speed);              // Calculate the percentage between the last and current target postion
 
         position = Vector3.Lerp(enemyManager.enemyPath[targetPositionIndex - 1],            // LERP between the last and current target position.
                                 enemyManager.enemyPath[targetPositionIndex],
