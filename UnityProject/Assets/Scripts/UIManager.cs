@@ -180,10 +180,8 @@ public class UIManager {
 
         //  Part - Left Click
         if (Input.GetMouseButtonDown(0)) {
-            bool mouseOnMap = Camera.main.ScreenToWorldPoint(Input.mousePosition).x > -5 && Camera.main.ScreenToWorldPoint(Input.mousePosition).x < 5;
-
             //  SubPart - Spawn Tower (If towerSpawnActive is true and not selecting path or tower)
-            if (towerSpawnActive == true && tm.SpawnCheck(towerSpawnSize) == true) {
+            if (towerSpawnActive == true && tm.SpawnLevelCheck() == true && tm.SpawnCheck(towerSpawnSize) == true) {
                 tm.SpawnTower(towerSpawnType);
 
                 towerSpawnActive = false;
@@ -191,14 +189,14 @@ public class UIManager {
             }
 
             //  SubPart - Upgrade Tower (If towerSpawnActive is false and selecting a tower)
-            else if (towerSpawnActive == false && towerUpgradeActive == false && tm.SpawnTowerCheck(towerSpawnSize) == false) {
+            else if (towerSpawnActive == false && towerUpgradeActive == false && tm.SpawnLevelCheck() == true && tm.SpawnTowerCheck(towerSpawnSize) == false) {
                 towerUpgradeActive = true;
 
                 UIUpgradeTower();
             }
 
             //  SubPart - Reset Icons (If upgrades displayed and clicking elsewhere)
-            else if (mouseOnMap == true && towerSpawnActive == false && towerUpgradeActive == true && tm.SpawnTowerCheck(towerSpawnSize) == true) {
+            else if (towerSpawnActive == false && towerUpgradeActive == true && tm.SpawnTowerCheck(towerSpawnSize) == true) {
                 ResetIconDisplay();
             }
         }

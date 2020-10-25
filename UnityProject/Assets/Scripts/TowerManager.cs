@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TowerManager {
@@ -6,6 +7,8 @@ public class TowerManager {
     //  _Unity Variables
     private GameObject objTowerPrefab;
     private GameObject objTowerSpawn;
+
+    private GameObject levelMap;
 
     //  Audio Variables
     public AudioClip sound_Archer;
@@ -30,6 +33,8 @@ public class TowerManager {
         //  Part - _Unity Setup
         objTowerPrefab = Resources.Load<GameObject>("Prefabs/Tower");
         objTowerSpawn = GameObject.Find("Tower_Spawn");
+
+        levelMap = GameObject.Find("Level Map");
 
         //  Part - Audio Setup
         sound_Archer = Resources.Load<AudioClip>("Audio/Sound_Archer");
@@ -57,7 +62,12 @@ public class TowerManager {
     }
 
     public bool SpawnCheck(float pSize) {
-        return SpawnTowerCheck(pSize) && SpawnPathCheck();
+        return SpawnLevelCheck() && SpawnTowerCheck(pSize) && SpawnPathCheck(pSize);
+    }
+
+    public bool SpawnLevelCheck() {
+        Vector3 mousePos = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, levelMap.transform.position.z);
+        return levelMap.GetComponent<Renderer>().bounds.Contains(mousePos);
     }
 
     public bool SpawnTowerCheck(float pSize) {
@@ -70,7 +80,50 @@ public class TowerManager {
         return true;
     }
 
-    private bool SpawnPathCheck() {
+    private bool SpawnPathCheck(float pSize) {
+        List<Vector3> pathPoints = GameManager.instance.levelManager.currentLevel.worldPath;
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        for (int i = 0; i < pathPoints.Count - 1; i++) {
+            //  Part - Horizontal Section
+            if (pathPoints[i].y == pathPoints[i + 1].y) {
+                Rect horzPath = Rect.zero;
+
+                //  SubPart - Right Path
+                if (pathPoints[i].x < pathPoints[i + 1].x) {
+                    horzPath = new Rect(pathPoints[i].x, pathPoints[i].y - (pSize / 2), Math.Abs(pathPoints[i].x - pathPoints[i + 1].x) + pSize, pSize);
+                }
+
+                //  SubPart - Left Path
+                else if (pathPoints[i].x > pathPoints[i + 1].x) {
+                    horzPath = new Rect(pathPoints[i + 1].x, pathPoints[i + 1].y - (pSize / 2), Math.Abs(pathPoints[i].x - pathPoints[i + 1].x) + pSize, pSize);
+                }
+
+                if (horzPath.Contains(mousePos)) {
+                    return false;
+                }
+            }
+
+            //  Part - Vertical Section
+            else if (pathPoints[i].x == pathPoints[i + 1].x) {
+                Rect vertPath = Rect.zero;
+
+                //  SubPart - Bottom Path
+                if (pathPoints[i].y < pathPoints[i + 1].y) {
+                    vertPath = new Rect(pathPoints[i].x - (pSize / 2), pathPoints[i].y, pSize, Math.Abs(pathPoints[i].y - pathPoints[i + 1].y) + pSize);
+                }
+
+                //  SubPart - Top Path
+                else if (pathPoints[i].y > pathPoints[i + 1].y) {
+                    vertPath = new Rect(pathPoints[i + 1].x - (pSize / 2), pathPoints[i + 1].y, pSize, Math.Abs(pathPoints[i].y - pathPoints[i + 1].y) + pSize);
+                }
+
+                if (vertPath.Contains(mousePos)) {
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 
