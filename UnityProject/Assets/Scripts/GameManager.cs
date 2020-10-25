@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -42,7 +43,10 @@ public class GameManager : MonoBehaviour
 
         // Set the onclick of the buttons and scale pause menu.
         resumeButton.GetComponent<Button>().onClick.AddListener(() => { UnpauseGame(); });
+        pauseMenu.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(() => { SceneManager.LoadSceneAsync(0); });
 
+        // Make sure the game starts unpaused.
+        UnpauseGame();
 
     }
 
