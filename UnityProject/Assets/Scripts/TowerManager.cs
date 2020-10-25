@@ -116,12 +116,12 @@ public class TowerManager {
 
                 //  SubPart - Right Path
                 if (pathPoints[i].x < pathPoints[i + 1].x) {
-                    horzPath = new Rect(pathPoints[i].x, pathPoints[i].y - (pSize / 2), Math.Abs(pathPoints[i].x - pathPoints[i + 1].x) + pSize, pSize);
+                    horzPath = new Rect(pathPoints[i].x, pathPoints[i].y - (pSize / 2), Math.Abs(pathPoints[i].x - pathPoints[i + 1].x) + pSize, 3 * (pSize / 2));
                 }
 
                 //  SubPart - Left Path
                 else if (pathPoints[i].x > pathPoints[i + 1].x) {
-                    horzPath = new Rect(pathPoints[i + 1].x, pathPoints[i + 1].y - (pSize / 2), Math.Abs(pathPoints[i].x - pathPoints[i + 1].x) + pSize, pSize);
+                    horzPath = new Rect(pathPoints[i + 1].x, pathPoints[i + 1].y - (pSize / 2), Math.Abs(pathPoints[i].x - pathPoints[i + 1].x) + pSize, 3 * (pSize / 2));
                 }
 
                 if (horzPath.Contains(mousePos)) {
@@ -135,12 +135,12 @@ public class TowerManager {
 
                 //  SubPart - Bottom Path
                 if (pathPoints[i].y < pathPoints[i + 1].y) {
-                    vertPath = new Rect(pathPoints[i].x - (pSize / 2), pathPoints[i].y, pSize, Math.Abs(pathPoints[i].y - pathPoints[i + 1].y) + pSize);
+                    vertPath = new Rect(pathPoints[i].x - (pSize / 2), pathPoints[i].y, 3 * (pSize / 2), Math.Abs(pathPoints[i].y - pathPoints[i + 1].y) + pSize);
                 }
 
                 //  SubPart - Top Path
                 else if (pathPoints[i].y > pathPoints[i + 1].y) {
-                    vertPath = new Rect(pathPoints[i + 1].x - (pSize / 2), pathPoints[i + 1].y, pSize, Math.Abs(pathPoints[i].y - pathPoints[i + 1].y) + pSize);
+                    vertPath = new Rect(pathPoints[i + 1].x - (pSize / 2), pathPoints[i + 1].y, 3 * (pSize / 2), Math.Abs(pathPoints[i].y - pathPoints[i + 1].y) + pSize);
                 }
 
                 if (vertPath.Contains(mousePos)) {

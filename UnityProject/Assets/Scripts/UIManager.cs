@@ -19,7 +19,7 @@ public class UIManager {
     private bool towerUpgradeActive;
 
     private TowerType towerSpawnType;
-    private const float towerSpawnSize = 0.3f;
+    private const float towerSpawnSize = 0.6f;
 
     //  Tower Variables
     private TowerMB towerSelected;
