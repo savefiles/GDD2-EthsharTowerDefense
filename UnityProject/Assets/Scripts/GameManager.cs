@@ -18,6 +18,10 @@ public class GameManager : MonoBehaviour
     public float points;
     private GameObject pointCounter;
 
+    // Pause menu things
+    public GameObject pauseMenu;
+    public GameObject resumeButton;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +40,12 @@ public class GameManager : MonoBehaviour
         // Get a reference to the point counter.
         pointCounter = GameObject.Find("Point_Counter");
 
+        // Set the onclick of the buttons.
+        pauseMenu.SetActive(true);
+        pauseMenu.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(() => { UnpauseGame(); });
+        resumeButton.GetComponent<Button>().onClick.AddListener(() => { UnpauseGame(); });
+        pauseMenu.SetActive(false);
+
     }
 
     // Update is called once per frame
@@ -48,6 +58,30 @@ public class GameManager : MonoBehaviour
 
         // Update point counter
         pointCounter.GetComponent<Text>().text = "Points: " + points;
+
+        // Check if the user (un)paused the game
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(pauseMenu.activeInHierarchy == false)
+                PauseGame();
+            else
+                UnpauseGame();
+        }
+    }
+
+
+    public void PauseGame()
+    {
+        // Stop time, show the pause menu.
+        pauseMenu.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void UnpauseGame()
+    {
+        // Hide the pause menu, start time again.
+        pauseMenu.SetActive(false);
+        Time.timeScale = 1;
     }
 
 }

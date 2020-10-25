@@ -213,6 +213,7 @@ public class UIManager {
             spawnedTickers[i].transform.position -= speed * dt;
         }
 
+
     }
 
     // Function that gets called from enemy manager when a wave is spawned.
