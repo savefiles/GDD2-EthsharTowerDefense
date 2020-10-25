@@ -727,6 +727,8 @@ GameObject:
   m_Component:
   - component: {fileID: 525991957}
   - component: {fileID: 525991958}
+  - component: {fileID: 525991960}
+  - component: {fileID: 525991961}
   - component: {fileID: 525991959}
   m_Layer: 0
   m_Name: Pause Menu
@@ -780,7 +782,19 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 5
   m_TargetDisplay: 0
---- !u!222 &525991959
+--- !u!225 &525991959
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 525991956}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!222 &525991960
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -788,6 +802,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 525991956}
   m_CullTransparentMesh: 0
+--- !u!114 &525991961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 525991956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &553837163
 GameObject:
   m_ObjectHideFlags: 0
@@ -2299,6 +2330,7 @@ GameObject:
   - component: {fileID: 1356119018}
   - component: {fileID: 1356119017}
   - component: {fileID: 1356119016}
+  - component: {fileID: 1356119020}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2399,6 +2431,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!225 &1356119020
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356119015}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1439653803
 GameObject:
   m_ObjectHideFlags: 0
@@ -2807,7 +2851,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
+  m_sendNavigationEvents: 0
   m_DragThreshold: 10
 --- !u!4 &1647267489
 Transform:
@@ -2849,7 +2893,7 @@ Transform:
   m_GameObject: {fileID: 1662322894}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -413.8, y: 60.6, z: -330.69214}
-  m_LocalScale: {x: 2524.4197, y: 1687.5734, z: 0}
+  m_LocalScale: {x: 10000, y: 1700, z: 0}
   m_Children: []
   m_Father: {fileID: 525991957}
   m_RootOrder: 4

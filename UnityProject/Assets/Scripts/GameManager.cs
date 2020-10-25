@@ -40,11 +40,9 @@ public class GameManager : MonoBehaviour
         // Get a reference to the point counter.
         pointCounter = GameObject.Find("Point_Counter");
 
-        // Set the onclick of the buttons.
-        pauseMenu.SetActive(true);
-        pauseMenu.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(() => { UnpauseGame(); });
+        // Set the onclick of the buttons and scale pause menu.
         resumeButton.GetComponent<Button>().onClick.AddListener(() => { UnpauseGame(); });
-        pauseMenu.SetActive(false);
+
 
     }
 
@@ -74,7 +72,7 @@ public class GameManager : MonoBehaviour
     {
         // Stop time, show the pause menu.
         pauseMenu.SetActive(true);
-        Time.timeScale = 0;
+        Time.timeScale = 0.000001f;
     }
 
     public void UnpauseGame()
