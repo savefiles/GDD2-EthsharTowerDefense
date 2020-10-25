@@ -29,6 +29,29 @@ public class TowerManager {
     private List<TowerMB> towerList;
     public List<TowerMB> TowerList => towerList;
 
+    public int manaCurr;
+
+    public int costArcher1 = 100;
+    public int costArcher2 = 200;
+    public int costArcher3a = 350;
+    public int costArcher3b = 400;
+    public int costArcher4a = 500;
+    public int costArcher4b = 600;
+
+    public int costMagic1 = 100;
+    public int costMagic2 = 200;
+    public int costMagic3a = 350;
+    public int costMagic3b = 400;
+    public int costMagic4a = 500;
+    public int costMagic4b = 600;
+
+    public int costSiege1 = 100;
+    public int costSiege2 = 200;
+    public int costSiege3a = 350;
+    public int costSiege3b = 400;
+    public int costSiege4a = 500;
+    public int costSiege4b = 600;
+
     public TowerManager() {
         //  Part - _Unity Setup
         objTowerPrefab = Resources.Load<GameObject>("Prefabs/Tower");
@@ -53,6 +76,8 @@ public class TowerManager {
 
         //  Part - Tower Setup
         towerList = new List<TowerMB>();
+
+        manaCurr = 500;
     }
 
     public void Update() {
@@ -136,7 +161,7 @@ public class TowerManager {
 
         //  Part - Setup Tower
         towerObj.GetComponent<TowerMB>().towerRef.SetupTower(towerObj, pType);
-        towerObj.GetComponent<TowerMB>().towerRef.UpgradeTower_Main(TowerLevel.Level_1);
+        towerObj.GetComponent<TowerMB>().towerRef.UpgradeTower_Main(TowerLevel.Level_1, this);
         towerObj.GetComponent<TowerMB>().towerRef.InitializeTower();
 
         //  Part - Add Tower to towerList

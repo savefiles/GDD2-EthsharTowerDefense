@@ -205,7 +205,7 @@ public class Tower {
     }
 
     //  MainMethod - Upgrade Tower Main (param Tower Level)
-    public void UpgradeTower_Main(TowerLevel pLevel) {
+    public void UpgradeTower_Main(TowerLevel pLevel, TowerManager pManager) {
         towerLevel = pLevel;
 
         switch (towerType) {
@@ -215,31 +215,37 @@ public class Tower {
                     //  SubPart - Archer Tower Level 1
                     case TowerLevel.Level_1:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costArcher1;
                         break;
 
                     //  SubPart - Archer Tower Level 2
                     case TowerLevel.Level_2:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costArcher2;
                         break;
 
                     //  SubPart - Archer Tower Level 3a
                     case TowerLevel.Level_3a:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costArcher3a;
                         break;
 
                     //  SubPart - Archer Tower Level 3b
                     case TowerLevel.Level_3b:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costArcher3b;
                         break;
 
                     //  SubPart - Archer Tower Level 4a
                     case TowerLevel.Level_4a:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costArcher4a;
                         break;
 
                     //  SubPart - Archer Tower Level 4b
                     case TowerLevel.Level_4b:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costArcher4b;
                         break;
                 }
                 break;
@@ -250,31 +256,37 @@ public class Tower {
                     //  SubPart - Magic Tower Level 1
                     case TowerLevel.Level_1:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costMagic1;
                         break;
 
                     //  SubPart - Magic Tower Level 2
                     case TowerLevel.Level_2:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costMagic2;
                         break;
 
                     //  SubPart - Magic Tower Level 3a
                     case TowerLevel.Level_3a:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costMagic3a;
                         break;
 
                     //  SubPart - Magic Tower Level 3b
                     case TowerLevel.Level_3b:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costMagic3b;
                         break;
 
                     //  SubPart - Magic Tower Level 4a
                     case TowerLevel.Level_4a:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costMagic4a;
                         break;
 
                     //  SubPart - Magic Tower Level 4b
                     case TowerLevel.Level_4b:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costMagic4b;
                         break;
                 }
                 break;
@@ -285,31 +297,37 @@ public class Tower {
                     //  SubPart - Siege Tower Level 1
                     case TowerLevel.Level_1:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costSiege1;
                         break;
 
                     //  SubPart - Siege Tower Level 2
                     case TowerLevel.Level_2:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costSiege2;
                         break;
 
                     //  SubPart - Siege Tower Level 3a
                     case TowerLevel.Level_3a:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costSiege3a;
                         break;
 
                     //  SubPart - Siege Tower Level 3b
                     case TowerLevel.Level_3b:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costSiege3b;
                         break;
 
                     //  SubPart - Siege Tower Level 4a
                     case TowerLevel.Level_4a:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costSiege4a;
                         break;
 
                     //  SubPart - Siege Tower Level 4b
                     case TowerLevel.Level_4b:
                         UpgradeTower_Sub(2f, 60, 10);
+                        pManager.manaCurr -= pManager.costSiege4b;
                         break;
                 }
                 break;

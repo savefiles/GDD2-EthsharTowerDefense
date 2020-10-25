@@ -84,19 +84,19 @@ public class UIManager {
         buttons_UpgradeArcher = GameObject.Find("Buttons_UpgradeArcher");
 
         buttons_UALvl2 = buttons_UpgradeArcher.transform.GetChild(0).gameObject;
-        buttons_UALvl2.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_2); ResetIconDisplay();  });
+        buttons_UALvl2.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_2, tm); ResetIconDisplay();  });
 
         buttons_UALvl3a = buttons_UpgradeArcher.transform.GetChild(1).gameObject;
-        buttons_UALvl3a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3a); ResetIconDisplay(); });
+        buttons_UALvl3a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3a, tm); ResetIconDisplay(); });
 
         buttons_UALvl3b = buttons_UpgradeArcher.transform.GetChild(2).gameObject;
-        buttons_UALvl3b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3b); ResetIconDisplay(); });
+        buttons_UALvl3b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3b, tm); ResetIconDisplay(); });
 
         buttons_UALvl4a = buttons_UpgradeArcher.transform.GetChild(3).gameObject;
-        buttons_UALvl4a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4a); ResetIconDisplay(); });
+        buttons_UALvl4a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4a, tm); ResetIconDisplay(); });
 
         buttons_UALvl4b = buttons_UpgradeArcher.transform.GetChild(4).gameObject;
-        buttons_UALvl4b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4b); ResetIconDisplay(); });
+        buttons_UALvl4b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4b, tm); ResetIconDisplay(); });
 
         buttons_UpgradeArcher.SetActive(false);
 
@@ -104,19 +104,19 @@ public class UIManager {
         buttons_UpgradeMagic = GameObject.Find("Buttons_UpgradeMagic");
 
         buttons_UMLvl2 = buttons_UpgradeMagic.transform.GetChild(0).gameObject;
-        buttons_UMLvl2.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_2); ResetIconDisplay(); });
+        buttons_UMLvl2.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_2, tm); ResetIconDisplay(); });
 
         buttons_UMLvl3a = buttons_UpgradeMagic.transform.GetChild(1).gameObject;
-        buttons_UMLvl3a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3a); ResetIconDisplay(); });
+        buttons_UMLvl3a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3a, tm); ResetIconDisplay(); });
 
         buttons_UMLvl3b = buttons_UpgradeMagic.transform.GetChild(2).gameObject;
-        buttons_UMLvl3b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3b); ResetIconDisplay(); });
+        buttons_UMLvl3b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3b, tm); ResetIconDisplay(); });
 
         buttons_UMLvl4a = buttons_UpgradeMagic.transform.GetChild(3).gameObject;
-        buttons_UMLvl4a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4a); ResetIconDisplay(); });
+        buttons_UMLvl4a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4a, tm); ResetIconDisplay(); });
 
         buttons_UMLvl4b = buttons_UpgradeMagic.transform.GetChild(4).gameObject;
-        buttons_UMLvl4b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4b); ResetIconDisplay(); });
+        buttons_UMLvl4b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4b, tm); ResetIconDisplay(); });
 
         buttons_UpgradeMagic.SetActive(false);
 
@@ -124,19 +124,19 @@ public class UIManager {
         buttons_UpgradeSiege = GameObject.Find("Buttons_UpgradeSiege");
 
         buttons_USLvl2 = buttons_UpgradeSiege.transform.GetChild(0).gameObject;
-        buttons_USLvl2.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_2); ResetIconDisplay(); });
+        buttons_USLvl2.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_2, tm); ResetIconDisplay(); });
 
         buttons_USLvl3a = buttons_UpgradeSiege.transform.GetChild(1).gameObject;
-        buttons_USLvl3a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3a); ResetIconDisplay(); });
+        buttons_USLvl3a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3a, tm); ResetIconDisplay(); });
 
         buttons_USLvl3b = buttons_UpgradeSiege.transform.GetChild(2).gameObject;
-        buttons_USLvl3b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3b); ResetIconDisplay(); });
+        buttons_USLvl3b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_3b, tm); ResetIconDisplay(); });
 
         buttons_USLvl4a = buttons_UpgradeSiege.transform.GetChild(3).gameObject;
-        buttons_USLvl4a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4a); ResetIconDisplay(); });
+        buttons_USLvl4a.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4a, tm); ResetIconDisplay(); });
 
         buttons_USLvl4b = buttons_UpgradeSiege.transform.GetChild(4).gameObject;
-        buttons_USLvl4b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4b); ResetIconDisplay(); });
+        buttons_USLvl4b.GetComponent<Button>().onClick.AddListener(() => { towerSelected.towerRef.UpgradeTower_Main(TowerLevel.Level_4b, tm); ResetIconDisplay(); });
 
         buttons_UpgradeSiege.SetActive(false);
 
@@ -173,6 +173,8 @@ public class UIManager {
     }
     
     public void Update(float dt) {
+        TowerManaControl();
+
         //  Part - Tower Icon Control
         if (towerSpawnActive == true) {
             TowerIconControl();
@@ -181,7 +183,7 @@ public class UIManager {
         //  Part - Left Click
         if (Input.GetMouseButtonDown(0)) {
             //  SubPart - Spawn Tower (If towerSpawnActive is true and not selecting path or tower)
-            if (towerSpawnActive == true && tm.SpawnLevelCheck() == true && tm.SpawnCheck(towerSpawnSize) == true) {
+            if (towerSpawnActive == true && towerUpgradeActive == false && tm.SpawnLevelCheck() == true && tm.SpawnCheck(towerSpawnSize) == true) {
                 tm.SpawnTower(towerSpawnType);
 
                 towerSpawnActive = false;
@@ -196,7 +198,7 @@ public class UIManager {
             }
 
             //  SubPart - Reset Icons (If upgrades displayed and clicking elsewhere)
-            else if (towerSpawnActive == false && towerUpgradeActive == true && tm.SpawnTowerCheck(towerSpawnSize) == true) {
+            else if (towerSpawnActive == false && towerUpgradeActive == true && tm.SpawnLevelCheck() == true && tm.SpawnTowerCheck(towerSpawnSize) == true) {
                 ResetIconDisplay();
             }
         }
@@ -239,12 +241,36 @@ public class UIManager {
                    canvas.transform));
     }
 
-
-
     #region Tower Functions
     private void TowerIconControl() {
         towerIcon.transform.position = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, -1);
         towerIcon.GetComponent<SpriteRenderer>().color = tm.SpawnCheck(towerSpawnSize) ? Color.green : Color.red;
+    }
+
+    private void TowerManaControl() {
+        //  Part - Archer Buttons
+        buttons_Spawn.transform.GetChild(0).gameObject.GetComponent<Button>().interactable = tm.costArcher1 <= tm.manaCurr;
+        buttons_UALvl2.GetComponent<Button>().interactable = tm.costArcher2 <= tm.manaCurr;
+        buttons_UALvl3a.GetComponent<Button>().interactable = tm.costArcher3a <= tm.manaCurr;
+        buttons_UALvl3b.GetComponent<Button>().interactable = tm.costArcher3b <= tm.manaCurr;
+        buttons_UALvl4a.GetComponent<Button>().interactable = tm.costArcher4a <= tm.manaCurr;
+        buttons_UALvl4b.GetComponent<Button>().interactable = tm.costArcher4b <= tm.manaCurr;
+
+        //  Part - Magic Buttons
+        buttons_Spawn.transform.GetChild(1).gameObject.GetComponent<Button>().interactable = tm.costArcher1 <= tm.manaCurr;
+        buttons_UMLvl2.GetComponent<Button>().interactable = tm.costMagic2 <= tm.manaCurr;
+        buttons_UMLvl3a.GetComponent<Button>().interactable = tm.costMagic3a <= tm.manaCurr;
+        buttons_UMLvl3b.GetComponent<Button>().interactable = tm.costMagic3b <= tm.manaCurr;
+        buttons_UMLvl4a.GetComponent<Button>().interactable = tm.costMagic4a <= tm.manaCurr;
+        buttons_UMLvl4b.GetComponent<Button>().interactable = tm.costMagic4b <= tm.manaCurr;
+
+        //  Part - Siege Buttons
+        buttons_Spawn.transform.GetChild(2).gameObject.GetComponent<Button>().interactable = tm.costArcher1 <= tm.manaCurr;
+        buttons_USLvl2.GetComponent<Button>().interactable = tm.costSiege2 <= tm.manaCurr;
+        buttons_USLvl3a.GetComponent<Button>().interactable = tm.costSiege3a <= tm.manaCurr;
+        buttons_USLvl3b.GetComponent<Button>().interactable = tm.costSiege3b <= tm.manaCurr;
+        buttons_USLvl4a.GetComponent<Button>().interactable = tm.costSiege4a <= tm.manaCurr;
+        buttons_USLvl4b.GetComponent<Button>().interactable = tm.costSiege4b <= tm.manaCurr;
     }
 
     private void UISpawnTower(int pType) {
