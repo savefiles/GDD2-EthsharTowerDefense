@@ -170,7 +170,7 @@ public class EnemyManager
         EnemyWave enemyWave = new EnemyWave();
 
         // Generate the difficulty based on a equation (use Desmos to see the graph).
-        float difficultyScalar = 1.0f + (0.01f * Mathf.Pow((float) waveNumber, 2));
+        float difficultyScalar = Mathf.Exp(0.05f * waveNumber);       // old curve:  1.0f + (0.01f * Mathf.Pow((float) waveNumber, 2));
         float enemyAmountScalar = 1.0f;
         switch(enemyType)
         {
