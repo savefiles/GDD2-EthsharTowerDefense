@@ -115,7 +115,7 @@ public class EnemyManager
                 if (enemyWave.timeSinceLastSpawn > enemyWave.spawnRate)
                 {
                     enemyWave.timeSinceLastSpawn = 0.0f;
-                    enemies.Add(new Enemy(enemyWave.enemyTypeToSpawn, enemyWave.difficultyScalar, this));
+                    enemies.Add(new Enemy(enemyWave.enemyTypeToSpawn, enemyWave.difficultyScalar, enemyWave.enemyAmountScalar, this));
                     enemyWave.enemiesLeftToSpawn -= 1;
                 }
             }
@@ -182,13 +182,14 @@ public class EnemyManager
                 enemyAmountScalar = 0.3f;
                 break;
             case EnemyType.Boss:
-                enemyAmountScalar = 0.01f;
+                enemyAmountScalar = 0.02f;
                 break;
         }
 
 
         // Scale the number of enemies by the difficulty scalar (maybe also scale health?).
-        enemyWave.enemiesLeftToSpawn = Mathf.CeilToInt(5 * difficultyScalar * enemyAmountScalar);
+        enemyWave.enemiesLeftToSpawn = Mathf.CeilToInt(5.0f * difficultyScalar * enemyAmountScalar);
+        enemyWave.enemyAmountScalar = enemyAmountScalar;
         enemyWave.spawnRate = SPAWNINGTIMEPERWAVE / (float) enemyWave.enemiesLeftToSpawn;
         enemyWave.enemyTypeToSpawn = enemyType;
         enemyWave.timeSinceLastSpawn = 10.0f;   // Force spawn the first frame.
@@ -212,6 +213,7 @@ public class EnemyManager
     public class EnemyWave
     {
         public int enemiesLeftToSpawn;                         // The number of enemies left to spawn in this wave.
+        public float enemyAmountScalar;                        // The scalar used to calculate the amount of enemies to spawn (used for mana).
         public EnemyType enemyTypeToSpawn;                     // The enemy type to spawn for this wave.
         public float spawnRate;                                // The calculated amount of time it takes to spawn each enemy.
         public float difficultyScalar;                         // How hard is the wave compared to base (used for points).

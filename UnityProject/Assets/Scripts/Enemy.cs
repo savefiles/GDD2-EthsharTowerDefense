@@ -16,6 +16,7 @@ public class Enemy
     private float health;                                   // Current health of the unit
     private float maxHealth;                                // The amount of health this unit started with.
     private float difficultyScalar;                         // The difficulty of this wave (for points).
+    private int manaOnDeath;                              // The amount of mana that this unit gives (on death).
     private Vector3 position;                               // Current position on the screen.
     public int targetPositionIndex { get; private set; }    // The index in the position list of the target position.
     private float speed;                                    // The inverse of the amount of time it takes for the enemy to go from each position.
@@ -30,7 +31,7 @@ public class Enemy
 
     // Getters/Setters
 
-    public Enemy(EnemyType type, float difficultyScalar, EnemyManager enemyManager)
+    public Enemy(EnemyType type, float difficultyScalar, float enemyAmountScalar, EnemyManager enemyManager)
     {
         this.enemyManager = enemyManager;
         this.type = type;
@@ -42,6 +43,9 @@ public class Enemy
         position = enemyManager.enemyPath[0];
         markedForDeletion = false;
         distanceToNextPosition = Vector3.Distance(enemyManager.enemyPath[targetPositionIndex - 1], enemyManager.enemyPath[targetPositionIndex]);
+
+        // Calculate the amount of mana given on death.
+        manaOnDeath = Mathf.CeilToInt(10.0f * difficultyScalar / enemyAmountScalar);
 
         // Change default speed/health depending on enemy type.
         switch (type)
@@ -55,11 +59,11 @@ public class Enemy
                 speed = 3.5f;
                 break;
             case EnemyType.Tank:
-                health = 30.0f;
+                health = 150.0f;
                 speed = 1.2f;
                 break;
             case EnemyType.Boss:
-                health = 100.0f;
+                health = 500.0f;
                 speed = 0.6f;
                 break;
         }
@@ -144,6 +148,9 @@ public class Enemy
 
         // Add points to game manager.
         GameManager.instance.points += difficultyScalar * 100;
+        
+        // Add mana to the count.
+        GameManager.instance.towerManager.manaCurr += manaOnDeath;
     }
 }
 

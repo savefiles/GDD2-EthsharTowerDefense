@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour
     public float points;
     private GameObject pointCounter;
 
+    // Mana
+    private GameObject manaCounter;
+
     // Pause menu things
     public GameObject pauseMenu;
     public GameObject resumeButton;
@@ -44,6 +47,7 @@ public class GameManager : MonoBehaviour
 
         // Get a reference to the point counter.
         pointCounter = GameObject.Find("Point_Counter");
+        manaCounter = GameObject.Find("Mana_Counter");
 
         // Set the onclick of the buttons and scale pause menu.
         resumeButton.GetComponent<Button>().onClick.AddListener(() => { UnpauseGame(); });
@@ -62,8 +66,9 @@ public class GameManager : MonoBehaviour
         uiManager.Update(dt);
         towerManager.Update();
 
-        // Update point counter
+        // Update point counter and mana counter
         pointCounter.GetComponent<Text>().text = "Points: " + points;
+        manaCounter.GetComponent<Text>().text = "Wizard Components: " + towerManager.manaCurr;
 
         // Check if the user (un)paused the game
         if(Input.GetKeyDown(KeyCode.Escape))
