@@ -1,0 +1,5 @@
+--- TOWERS ---
+The tower path check checks against the bottom left of the tower model
+Sometimes, the ghost tower (red/green) will get stuck on the mouse and cause a softlock.
+Audio stacking volume is not bueno (the quad archer is loud af)
+Mouse raycast is not exactly on mouse position?
