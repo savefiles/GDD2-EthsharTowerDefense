@@ -26,6 +26,9 @@ public class ScenesManager : MonoBehaviour
 
         // Set the onclick of the level button
         GameObject.Find("Level 1 Button").GetComponent<Button>().onClick.AddListener(() => { LoadScene(1); });
+
+        // Set the onclick of the quit game
+        GameObject.Find("Quit Button").GetComponent<Button>().onClick.AddListener(() => { Application.Quit(); });
     }
 
     // Update is called once per frame
