@@ -11,7 +11,9 @@ public class ScenesManager : MonoBehaviour
     Scene s_mainMenu;
     Scene s_inGame;
     
-    
+    // Credits screen.
+    public GameObject credits;
+    private bool isCreditsDisplayed = false;
     
     void Awake()
     {
@@ -29,6 +31,10 @@ public class ScenesManager : MonoBehaviour
 
         // Set the onclick of the quit game
         GameObject.Find("Quit Button").GetComponent<Button>().onClick.AddListener(() => { Application.Quit(); });
+
+        // Set the onclick of both resume buttons
+        GameObject.Find("Credits Button").GetComponent<Button>().onClick.AddListener(() => { ToggleCredits(); });
+        credits.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => { ToggleCredits(); });
     }
 
     // Update is called once per frame
@@ -40,6 +46,11 @@ public class ScenesManager : MonoBehaviour
     public void LoadScene(int index)
     {
         SceneManager.LoadSceneAsync(index);
-        Debug.Log("Loaded scene " + index);
+    }
+
+    public void ToggleCredits()
+    {
+        isCreditsDisplayed = !isCreditsDisplayed;
+        credits.SetActive(isCreditsDisplayed);
     }
 }
