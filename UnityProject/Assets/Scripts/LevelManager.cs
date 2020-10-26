@@ -13,7 +13,7 @@ public class LevelManager
     public Sprite currentLevelSprite;
     public GameObject levelGameObject;
 
-    private Level level0;
+    private Level level;
 
     public LevelManager()
     {
@@ -21,9 +21,9 @@ public class LevelManager
         levelGameObject = GameObject.Find("Level Map");
 
         // Load the demo level.
-        level0 = new Level("", this);
-        level0.LoadLevel();
-        currentLevel = level0;
+        level = new Level(this);
+        level.LoadLevel();
+        currentLevel = level;
     }
 
     void Start()

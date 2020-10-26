@@ -14,29 +14,50 @@ public class Level
     private Sprite levelBackground;                         // The image that represents the background.
 
 
-    public Level(string folderPath, LevelManager lm)
+    public Level(LevelManager lm)
     {
         this.lm = lm;
         this.sr = lm.levelGameObject.GetComponent<SpriteRenderer>();
 
-        // For testing, we hardcode points.
+        // Load level depending on passed in input from main menu.
         relativePath = new List<Vector2>();
-        relativePath.Add(new Vector2(0.0f, 0.195f));
-        relativePath.Add(new Vector2(0.225f, 0.195f));
-        relativePath.Add(new Vector2(0.225f, 0.395f));
-        relativePath.Add(new Vector2(0.345f, 0.395f));
-        relativePath.Add(new Vector2(0.345f, 0.110f));
-        relativePath.Add(new Vector2(0.861f, 0.110f));
-        relativePath.Add(new Vector2(0.861f, 0.244f));
-        relativePath.Add(new Vector2(0.534f, 0.244f));
-        relativePath.Add(new Vector2(0.534f, 0.594f));
-        relativePath.Add(new Vector2(0.186f, 0.594f));
-        relativePath.Add(new Vector2(0.186f, 0.800f));
-        relativePath.Add(new Vector2(0.725f, 0.800f));
-        relativePath.Add(new Vector2(0.725f, 0.402f));
-        relativePath.Add(new Vector2(1.000f, 0.402f));
+        if (PlayerPrefs.GetInt("Level") == 0)
+        {
+            relativePath.Add(new Vector2(0.0f, 0.195f));
+            relativePath.Add(new Vector2(0.225f, 0.195f));
+            relativePath.Add(new Vector2(0.225f, 0.395f));
+            relativePath.Add(new Vector2(0.345f, 0.395f));
+            relativePath.Add(new Vector2(0.345f, 0.110f));
+            relativePath.Add(new Vector2(0.861f, 0.110f));
+            relativePath.Add(new Vector2(0.861f, 0.244f));
+            relativePath.Add(new Vector2(0.534f, 0.244f));
+            relativePath.Add(new Vector2(0.534f, 0.594f));
+            relativePath.Add(new Vector2(0.186f, 0.594f));
+            relativePath.Add(new Vector2(0.186f, 0.800f));
+            relativePath.Add(new Vector2(0.725f, 0.800f));
+            relativePath.Add(new Vector2(0.725f, 0.402f));
+            relativePath.Add(new Vector2(1.000f, 0.402f));
 
-        levelBackground = Resources.Load<Sprite>("Levels/Level0/level0");
+            levelBackground = Resources.Load<Sprite>("Levels/Level0/level0");
+        }
+        else
+        {
+            relativePath.Add(new Vector2(0.0f, 0.195f));
+            relativePath.Add(new Vector2(0.450f, 0.195f));
+            relativePath.Add(new Vector2(0.450f, 0.395f));
+            relativePath.Add(new Vector2(0.162f, 0.395f));
+            relativePath.Add(new Vector2(0.162f, 0.692f));
+            relativePath.Add(new Vector2(0.515f, 0.692f));
+            relativePath.Add(new Vector2(0.515f, 0.880f));
+            relativePath.Add(new Vector2(0.740f, 0.880f));
+            relativePath.Add(new Vector2(0.740f, 0.162f));
+            relativePath.Add(new Vector2(0.907f, 0.162f));
+            relativePath.Add(new Vector2(0.907f, 0.435f));
+            relativePath.Add(new Vector2(1.000f, 0.435f));
+
+            levelBackground = Resources.Load<Sprite>("Levels/Level1/level1");
+        }
+
     }
 
     public void LoadLevel()
@@ -50,7 +71,8 @@ public class Level
 
     private Vector3 ConvertToWorldCoords(Vector2 point)
     {
-        Bounds spriteBounds = sr.bounds;
+        Bounds spriteBounds = sr
+            .bounds;
         Vector2 topLeft = new Vector2(spriteBounds.center.x - spriteBounds.extents.x,
                                       spriteBounds.center.y + spriteBounds.extents.y);
         Vector3 worldPoint = new Vector3(topLeft.x + point.x * spriteBounds.size.x,
