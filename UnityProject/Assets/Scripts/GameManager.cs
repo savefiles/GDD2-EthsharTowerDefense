@@ -23,6 +23,10 @@ public class GameManager : MonoBehaviour
     public GameObject pauseMenu;
     public GameObject resumeButton;
 
+    // Game over menu
+    public GameObject gameOverMenu;
+    private bool isGameOver = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -69,6 +73,17 @@ public class GameManager : MonoBehaviour
             else
                 UnpauseGame();
         }
+
+        // If the player took too much town damage
+        if(enemyManager.townHealth <= 0)
+        {
+            if(isGameOver == false)
+            {
+                GameOver();
+                isGameOver = true;
+            }
+
+        }
     }
 
 
@@ -86,4 +101,12 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    public void GameOver()
+    {
+        // Stop time, update point counter, show menu.
+        gameOverMenu.SetActive(true);
+        gameOverMenu.transform.GetChild(1).GetComponent<Text>().text = "Points: " + points;
+        gameOverMenu.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(()=>{ SceneManager.LoadSceneAsync(0); });
+        Time.timeScale = 0.000001f;
+    }
 }

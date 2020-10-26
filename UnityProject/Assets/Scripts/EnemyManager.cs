@@ -23,7 +23,7 @@ public class EnemyManager
     public List<EnemyWave> upcomingWaves;                  // List of waves that are after the currently spawned waves.
 
     public bool hasGameStarted = false;                    // Don't actually start anything until the button is pressed for first time.
-    private int townHealth = 10;                            // The amount of hits a town can take.
+    public int townHealth = 10;                            // The amount of hits a town can take.
 
     // Only allow three waves to spawn, keep track of the number of enemies/type to spawn.
 
