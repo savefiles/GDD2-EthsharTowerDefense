@@ -147,8 +147,8 @@ public class Enemy
         markedForDeletion = true;
 
         // Add points to game manager.
-        GameManager.instance.points += difficultyScalar * 100;
-        
+        GameManager.instance.points += manaOnDeath * 10;
+
         // Add mana to the count.
         GameManager.instance.towerManager.manaCurr += manaOnDeath;
     }

@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public UIManager    uiManager;
     
     // Points
-    public float points;
+    public int points;
     private GameObject pointCounter;
 
     // Mana
@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
         // Get a reference to the point counter.
         pointCounter = GameObject.Find("Point_Counter");
         manaCounter = GameObject.Find("Mana_Counter");
+
 
         // Set the onclick of the buttons and scale pause menu.
         resumeButton.GetComponent<Button>().onClick.AddListener(() => { UnpauseGame(); });

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // Enemy Manager class
 // - Dummy container for data regarding each enemy.
@@ -24,6 +25,7 @@ public class EnemyManager
 
     public bool hasGameStarted = false;                    // Don't actually start anything until the button is pressed for first time.
     public int townHealth = 10;                            // The amount of hits a town can take.
+    private GameObject lifeCounter;
 
     // Only allow three waves to spawn, keep track of the number of enemies/type to spawn.
 
@@ -42,6 +44,10 @@ public class EnemyManager
         enemyPrefabs.Add(Resources.Load<GameObject>("Prefabs/Enemy_Fast"));
         enemyPrefabs.Add(Resources.Load<GameObject>("Prefabs/Enemy_Tank"));
         enemyPrefabs.Add(Resources.Load<GameObject>("Prefabs/Enemy_Boss"));
+
+        // Get a reference to the life counter
+        lifeCounter = GameObject.Find("Life_Counter");
+        lifeCounter.GetComponent<Text>().text = "Lives: " + townHealth;
     }
 
     // Update is called from GameManager every frame.
@@ -206,6 +212,8 @@ public class EnemyManager
             townHealth -= 3;
         else
             townHealth -= 1;
+
+        lifeCounter.GetComponent<Text>().text = "Lives: " + townHealth;
     }
 
 
