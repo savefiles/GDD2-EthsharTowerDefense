@@ -26,6 +26,7 @@ public class UIManager {
 
     //  UI Variables
     private GameObject buttons_NextWave;
+    private GameObject ui_instructions;
     private GameObject buttons_Spawn;
 
     private GameObject buttons_UpgradeArcher;
@@ -70,7 +71,8 @@ public class UIManager {
 
         //  Part - UI Setup
         buttons_NextWave = GameObject.Find("Button_NextWave");
-        buttons_NextWave.GetComponent<Button>().onClick.AddListener(() => { em.SpawnNextWave(); });
+        ui_instructions = GameObject.Find("UI_Instructions");
+        buttons_NextWave.GetComponent<Button>().onClick.AddListener(() => { em.SpawnNextWave(); ui_instructions.SetActive(false); });
 
         //  >> SubPart - Spawn Button Setup
         buttons_Spawn = GameObject.Find("Buttons_Spawn");
